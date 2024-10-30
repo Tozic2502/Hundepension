@@ -5,9 +5,6 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
 
-        Hund Hund = new Hund();
-
-        Hund.Hund();
 
 
         }
