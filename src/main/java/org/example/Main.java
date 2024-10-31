@@ -34,6 +34,32 @@ public class Main {
 
             case "hund","2":
                 System.out.println("21: Se Hunde\n22: Opret Hund");
+                menuNavigator = inScanner.next();
+            case "Opret Hund","opret Hund","Opret hund":
+            case "Se Hunde","se Hunde","Se hunde":
+            case "Dyrlæge","dyrlæge","3":
+
+                System.out.println("1: Se Dyrlæger\n2: Opret Dyrlæge");
+                menuNavigator = inScanner.next();
+                switch(menuNavigator)
+                {
+                    case "Se","Se Dyrlæge","1":
+                        vetDao.readAllVeterinarians();
+                        break;
+
+                    case "Opret Dyrelæge","Opret","2":
+                        Veterinarian opretVet = new Veterinarian();
+                        opretVet.setFldVetName(inputString("Skriv dyrlægens navn:"));
+                        opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
+                        opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
+                        vetDao.createVeterinarian(opretVet);
+                        break;
+                }
+        }
+
+        System.out.println("end");
+
+        Hund Hund = new Hund();
                 menuNavigator = inScanner.nextLine().toLowerCase();
                 HundDao dao = new HundDaoImpl();
                 switch (menuNavigator){
@@ -60,15 +86,15 @@ public class Main {
 
                     Hund d = new Hund(name, age, breed, weight);
                     dao.createHund(d);
-                    break;
+
 
                 case "se hunde":
 
                     dao.readAllHund();
                     dao.readHund(inputInt("Skriv Hundens id"));
                     break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + menuNavigator);
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + menuNavigator);
                 }
                 break;
             case "dyrlæge","3":
@@ -96,7 +122,6 @@ public class Main {
 
             default:
                 System.out.printf("Invalid choice");
-
         }
 
         System.out.println("end");
@@ -111,10 +136,10 @@ public class Main {
     public static String inputString (String prompt)
     {
        //Prepares an outputstring
-        String outputString = "";
+        String outputString;
 
         //Flag to check whether any input has been entered
-        Boolean isEmpty = outputString.isEmpty();
+        Boolean isEmpty = true;
 
         //If isEmpty is true, loop runs
         while(isEmpty)
@@ -125,6 +150,9 @@ public class Main {
             //Readies a scanner and takes the user input
             Scanner inputScanner = new Scanner(System.in);
             outputString = inputScanner.nextLine();
+
+            //Checks whether outputString is empty
+            isEmpty = outputString.isEmpty();
 
             //When the string has input, returns the string.
             if (!isEmpty)
@@ -156,7 +184,8 @@ public class Main {
             Scanner inputScanner = new Scanner(System.in);
             outputInt = inputScanner.nextInt();
 
-            isEmpty = outputInt == 0;
+            //Checks whether input is 0
+            isEmpty = outputInt==0;
 
             //If outputInt != 0, returns outputInt
             if (!isEmpty)
