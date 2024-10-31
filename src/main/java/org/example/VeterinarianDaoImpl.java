@@ -63,7 +63,7 @@ public class VeterinarianDaoImpl implements VeterinarianDao
             veterinarian.setFldVetTelephoneNumber(rs.getInt(1));
             veterinarian.setFldVetName(rs.getString(2));
             veterinarian.setFldVetAdres(rs.getString(3));
-            System.out.println(veterinarian.getFldVetName()+" "+ veterinarian.getFldVetAdres()+" "+veterinarian.getFldVetTelephoneNumber());
+            System.out.println(veterinarian.getFldVetName().trim()+" "+ veterinarian.getFldVetAdres().trim()+" "+veterinarian.getFldVetTelephoneNumber());
         }
         if (!hasVeterinarians) {
             System.out.println("No veterinarians found.");

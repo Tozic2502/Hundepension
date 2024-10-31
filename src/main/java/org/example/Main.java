@@ -40,6 +40,7 @@ public class Main {
                 {
                     case "Se","Se Dyrlæge","1":
                         vetDao.readAllVeterinarians();
+                        break;
 
                     case "Opret Dyrelæge","Opret","2":
                         Veterinarian opretVet = new Veterinarian();
@@ -47,6 +48,7 @@ public class Main {
                         opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
                         opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
                         vetDao.createVeterinarian(opretVet);
+                        break;
                 }
         }
 
@@ -85,10 +87,10 @@ public class Main {
     public static String inputString (String prompt)
     {
        //Prepares an outputstring
-        String outputString = "";
+        String outputString;
 
         //Flag to check whether any input has been entered
-        Boolean isEmpty = outputString.isEmpty();
+        Boolean isEmpty = true;
 
         //If isEmpty is true, loop runs
         while(isEmpty)
@@ -99,6 +101,9 @@ public class Main {
             //Readies a scanner and takes the user input
             Scanner inputScanner = new Scanner(System.in);
             outputString = inputScanner.nextLine();
+
+            //Checks whether outputString is empty
+            isEmpty = outputString.isEmpty();
 
             //When the string has input, returns the string.
             if (!isEmpty)
@@ -115,10 +120,10 @@ public class Main {
     private static int inputInt(String prompt)
     {
         //Prepares an output integer
-        int outputInt = 0;
+        int outputInt;
 
         //Flag to check whether any input, not zero, has been entered
-        Boolean isEmpty = outputInt==0;
+        Boolean isEmpty = true;
 
         //If isEmpty is true, loop runs
         while(isEmpty)
@@ -129,6 +134,9 @@ public class Main {
             //Readies a scanner and takes the user input
             Scanner inputScanner = new Scanner(System.in);
             outputInt = inputScanner.nextInt();
+
+            //Checks whether input is 0
+            isEmpty = outputInt==0;
 
             //If outputInt != 0, returns outputInt
             if (!isEmpty)
