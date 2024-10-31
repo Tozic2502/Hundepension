@@ -17,17 +17,22 @@ public class Main {
         Scanner inScanner = new Scanner(System.in);
         String menuNavigator;
         System.out.println("Goddag Rosa.\nVælg en funktion\n1: Kunde\n2: Hund\n3: Dyrlæge");
-        menuNavigator = inScanner.next();
+        menuNavigator = inScanner.nextLine().toLowerCase();
 
         switch(menuNavigator)
         {
-            case "Kunde","kunde","1":
+            case "Kunde","1":
                 System.out.println("11: Se Kunder\n12: Opret Kunde");
-                menuNavigator = inScanner.next();
-                case "Opret Kunde","opret Kunde","Opret kunde":
-                case "Se Kunder","se Kunde","Se kunde":
+                menuNavigator = inScanner.nextLine().toLowerCase();
+                switch (menuNavigator) {
+                    case "opret kunde":
+                        break;
+                    case "se kunde":
+                        break;
+                }
+                break;
 
-            case "Hund","hund","2":
+            case "hund","2":
                 System.out.println("21: Se Hunde\n22: Opret Hund");
                 menuNavigator = inScanner.next();
             case "Opret Hund","opret Hund","Opret hund":
@@ -55,29 +60,73 @@ public class Main {
         System.out.println("end");
 
         Hund Hund = new Hund();
+                menuNavigator = inScanner.nextLine().toLowerCase();
+                HundDao dao = new HundDaoImpl();
+                switch (menuNavigator){
+                case "opret hund":
+                    Hund Hund = new Hund();
 
-        System.out.println("start");
-        Scanner scN = new Scanner(System.in);//Scanner to check inputs
-        System.out.print("Enter the name of the dog: ");
-        name = scN.next();
-        Scanner scA = new Scanner(System.in);//Scanner to check inputs
-        System.out.print("Enter the age of the dog: ");
-        age = scA.nextInt();
-        Scanner scB = new Scanner(System.in);//Scanner to check inputs
-        System.out.print("Enter the breed: ");
-        breed = scB.next();
-        Scanner scW = new Scanner(System.in);//Scanner to check inputs
-        System.out.print("Enter the weight of the dog: ");
-        weight = scW.nextInt();
+                    System.out.println("start");
+                    Scanner scN = new Scanner(System.in);//Scanner to check inputs
+                    System.out.print("Enter the name of the dog: ");
+                    name = scN.next();
+                    Scanner scA = new Scanner(System.in);//Scanner to check inputs
+                    System.out.print("Enter the age of the dog: ");
+                    age = scA.nextInt();
+                    Scanner scB = new Scanner(System.in);//Scanner to check inputs
+                    System.out.print("Enter the breed: ");
+                    breed = scB.next();
+                    Scanner scW = new Scanner(System.in);//Scanner to check inputs
+                    System.out.print("Enter the weight of the dog: ");
+                    weight = scW.nextInt();
 
-        HundDao dao = new HundDaoImpl();
 
-        //dao.readHund(1);
 
-        Hund d = new Hund(name, age, breed, weight);
-        dao.createHund(d);
 
-        dao.readAllHund();
+
+                    Hund d = new Hund(name, age, breed, weight);
+                    dao.createHund(d);
+
+
+                case "se hunde":
+
+                    dao.readAllHund();
+                    dao.readHund(inputInt("Skriv Hundens id"));
+                    break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + menuNavigator);
+                }
+                break;
+            case "dyrlæge","3":
+
+                System.out.println("1: Se Dyrlæger\n2: Opret Dyrlæge");
+                menuNavigator = inScanner.nextLine().toLowerCase();
+                switch(menuNavigator)
+                {
+                    case "se dyrlæger","1":
+                        vetDao.readAllVeterinarians();
+                        break;
+
+                    case "opret dyrelæge","2":
+                        Veterinarian opretVet = new Veterinarian();
+                        opretVet.setFldVetName(inputString("Skriv dyrlægens navn:"));
+                        opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
+                        opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
+                        vetDao.createVeterinarian(opretVet);
+                        break;
+                    default:
+                        System.out.printf("invalid menu navn: %s\n");
+                }
+                break;
+
+
+            default:
+                System.out.printf("Invalid choice");
+        }
+
+        System.out.println("end");
+
+
 
         System.out.println("slut");
 
