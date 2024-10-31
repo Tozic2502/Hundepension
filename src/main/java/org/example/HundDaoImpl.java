@@ -34,17 +34,17 @@ public class HundDaoImpl implements HundDao {
 
     @Override
     public void readHund(int id) throws Exception{
-        String sql = "SELECT * FROM tblDog WHERE tblID = ?";
+        String sql = "SELECT * FROM tblDog WHERE fldID = ?";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, id);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             Hund hund = new Hund();
-            hund.setName(rs.getString(1));
-            hund.setAge(rs.getInt(2));
-            hund.setBreed(rs.getString(3));
-            hund.setWeight(rs.getInt(4));
+            hund.setName(rs.getString(2));
+            hund.setAge(rs.getInt(3));
+            hund.setBreed(rs.getString(7));
+            hund.setWeight(rs.getInt(8));
 
             System.out.println(hund.getName() + " "+ hund.getAge()+ " "+ hund.getBreed()+ " "+ hund.getWeight());
         } else {

@@ -67,8 +67,8 @@ public class Main {
                     dao.readAllHund();
                     dao.readHund(inputInt("Skriv Hundens id"));
                     break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + menuNavigator);
+                default:
+                    throw new IllegalStateException("Unexpected value: " + menuNavigator);
                 }
                 break;
             case "dyrlæge","3":
@@ -96,6 +96,7 @@ public class Main {
 
             default:
                 System.out.printf("Invalid choice");
+
         }
 
         System.out.println("end");
@@ -140,10 +141,10 @@ public class Main {
     private static int inputInt(String prompt)
     {
         //Prepares an output integer
-        int outputInt = 0;
+        int outputInt;
 
         //Flag to check whether any input, not zero, has been entered
-        Boolean isEmpty = outputInt==0;
+        Boolean isEmpty = true;
 
         //If isEmpty is true, loop runs
         while(isEmpty)
@@ -154,6 +155,8 @@ public class Main {
             //Readies a scanner and takes the user input
             Scanner inputScanner = new Scanner(System.in);
             outputInt = inputScanner.nextInt();
+
+            isEmpty = outputInt == 0;
 
             //If outputInt != 0, returns outputInt
             if (!isEmpty)
