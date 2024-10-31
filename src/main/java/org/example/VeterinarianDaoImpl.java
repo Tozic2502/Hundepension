@@ -26,9 +26,9 @@ public class VeterinarianDaoImpl implements VeterinarianDao
         pstmt.setString(3, veterinarian.getFldVetAdres());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
-            System.out.println("Department added successfully.");
+            System.out.println("Veterinarian added successfully.");
         } else {
-            System.out.println("Failed to add the department.");
+            System.out.println("Failed to add the veterinarian.");
         }
     }
 
