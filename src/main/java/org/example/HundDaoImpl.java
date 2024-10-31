@@ -3,7 +3,7 @@ import java.sql.*;
 
 public class HundDaoImpl implements HundDao {
 
-    private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=sample";
+    private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=dbDogCare";
     private static final String USERNAME = "sa"; // replace with your username
     private static final String PASSWORD = "1234"; // replace with your password
 
@@ -17,14 +17,13 @@ public class HundDaoImpl implements HundDao {
 
     @Override
     public void createHund(Hund hund) throws Exception {
-        String sql = "INSERT INTO tblDog VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tblDog(fldName, fldAge, fldBreed, fldWeight) VALUES (?, ?, ?, ?)";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, hund.getName());
         pstmt.setInt(2, hund.getAge());
         pstmt.setString(3, hund.getBreed());
         pstmt.setInt(4, hund.getWeight());
-        pstmt.setInt(5, hund.getID());
         int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
             System.out.println("Hund added successfully.");
@@ -67,8 +66,7 @@ public class HundDaoImpl implements HundDao {
             hund.setAge(rs.getInt(2));
             hund.setBreed(rs.getString(3));
             hund.setWeight(rs.getInt(4));
-            hund.setID(rs.getInt(5));
-            System.out.println(hund.getID()+" "+ hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
+            System.out.println(hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
         }
         if (!hasDog) {
             System.out.println("No departments found.");
