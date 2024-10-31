@@ -6,7 +6,7 @@ public class VeterinarianDaoImpl implements VeterinarianDao
 {
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=dbDogCare";
     private static final String USERNAME = "sa"; // replace with your username
-    private static final String PASSWORD = "sqlserver1234"; // replace with your password
+    private static final String PASSWORD = "1234"; // replace with your password
 
     public static Connection getConnection() throws Exception {
         Connection conn = null;

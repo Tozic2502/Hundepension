@@ -8,7 +8,7 @@ public class HundDaoImpl implements HundDao {
     private static final String PASSWORD = "1234"; // replace with your password
 
     public static Connection getConnection() throws Exception {
-        Connection conn = null;
+        Connection conn;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         System.out.println("Connected to the database.");
@@ -54,13 +54,13 @@ public class HundDaoImpl implements HundDao {
 
     @Override
     public void readAllHund() throws Exception{
-        String sql = "SELECT * FROM tblDog";
+        String sql = "SELECT fldName, fldAge, fldBreed, fldWeight FROM tblDog";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        boolean hasDog = false;
+        boolean hasHund = false;
         while (rs.next()) {
-            hasDog = true;
+            hasHund = true;
             Hund hund = new Hund();
             hund.setName(rs.getString(1));
             hund.setAge(rs.getInt(2));
@@ -68,7 +68,7 @@ public class HundDaoImpl implements HundDao {
             hund.setWeight(rs.getInt(4));
             System.out.println(hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
         }
-        if (!hasDog) {
+        if (!hasHund) {
             System.out.println("No departments found.");
         }
     }

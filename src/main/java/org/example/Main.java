@@ -60,7 +60,7 @@ public class Main {
 
                     Hund d = new Hund(name, age, breed, weight);
                     dao.createHund(d);
-
+                    break;
 
                 case "se hunde":
 
