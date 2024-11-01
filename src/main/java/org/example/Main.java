@@ -1,6 +1,5 @@
 package org.example;
 
-
 import java.util.Scanner;
 
 public class Main
@@ -11,15 +10,19 @@ public class Main
         int age;
         String breed;
         int weight;
-        //VeterinarianDao vetDao = new VeterinarianDaoImpl();
 
         System.out.println("start");
 
+        //Creates a scanner to take user input
         Scanner inScanner = new Scanner(System.in);
+        //Creates a string used for navigating the menu
         String menuNavigator;
+        //Prints the first menu options, more menu options would be added if we had more time
         System.out.println("Goddag Rosa.\nVælg en funktion\n1: Kunde\n2: Hund\n3: Dyrlæge");
+        //Example of how we take input for the menu, regardless of upper/lower case
         menuNavigator = inScanner.nextLine().toLowerCase();
 
+        //Switchcase bringing us to the user specified menu option
         switch(menuNavigator)
         {
             case "kunde","1":
@@ -83,19 +86,24 @@ public class Main
                 System.out.println("1: Se Dyrlæger\n2: Opret Dyrlæge");
                 menuNavigator = inScanner.next().toLowerCase();
 
+                //Instantiates a new object of class VeterinarianDaoImpl of type VeterinarianDao
                 VeterinarianDao vetDao = new VeterinarianDaoImpl();
 
                 switch(menuNavigator)
                 {
                     case "se dyrlæge","1":
+                        //Calls a method from class VeterinarianDaoImpl to read vets from database and print
                         vetDao.readAllVeterinarians();
                         break;
 
                     case "opret dyrlæge","2":
+                        //Creates a new object of class Veterinarian
                         Veterinarian opretVet = new Veterinarian();
+                        //Calls method from Veterinarian class to set variables of opretVet, using method inputString()
                         opretVet.setFldVetName(inputString("Skriv dyrlægens navn:"));
                         opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
                         opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
+                        //Uses our vetDao object to create the entry in our database
                         vetDao.createVeterinarian(opretVet);
                         break;
                 }
@@ -108,73 +116,9 @@ public class Main
 
         System.out.println("end");
 
-
-               /* menuNavigator = inScanner.nextLine().toLowerCase();
-                HundDao dao = new HundDaoImpl();
-                switch (menuNavigator){
-                case "opret hund":
-
-                    System.out.println("start");
-                    Scanner scN = new Scanner(System.in);//Scanner to check inputs
-                    System.out.print("Enter the name of the dog: ");
-                    name = scN.next();
-                    Scanner scA = new Scanner(System.in);//Scanner to check inputs
-                    System.out.print("Enter the age of the dog: ");
-                    age = scA.nextInt();
-                    Scanner scB = new Scanner(System.in);//Scanner to check inputs
-                    System.out.print("Enter the breed: ");
-                    breed = scB.next();
-                    Scanner scW = new Scanner(System.in);//Scanner to check inputs
-                    System.out.print("Enter the weight of the dog: ");
-                    weight = scW.nextInt();
-
-
-
-
-
-                    Hund d = new Hund(name, age, breed, weight);
-                    dao.createHund(d);
-
-
-                case "se hunde":
-
-                    dao.readAllHund();
-                    dao.readHund(inputInt("Skriv Hundens id"));
-                    break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + menuNavigator);
-                }
-                break;
-            case "dyrlæge","3":
-
-                System.out.println("1: Se Dyrlæger\n2: Opret Dyrlæge");
-                menuNavigator = inScanner.nextLine().toLowerCase();
-                switch(menuNavigator)
-                {
-                    case "se dyrlæger","1":
-                        vetDao.readAllVeterinarians();
-                        break;
-
-                    case "opret dyrelæge","2":
-                        Veterinarian opretVet = new Veterinarian();
-                        opretVet.setFldVetName(inputString("Skriv dyrlægens navn:"));
-                        opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
-                        opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
-                        vetDao.createVeterinarian(opretVet);
-                        break;
-                    default:
-                        System.out.printf("invalid menu navn: %s\n");
-                }
-                break;
-
-
-            default:
-                System.out.printf("Invalid choice");
-        }*/
-
     }
 
-    //Metode som tager inputs af typen string, for at følge DRY princippet
+    //Method taking input of type String and returning it in an outputString variable
     public static String inputString (String prompt)
     {
        //Prepares an outputstring
@@ -201,13 +145,11 @@ public class Main
             {
                 return outputString;
             }
-
-
         }
         return "Method is not working properly, please contact developer";
     }
 
-    //Metode som tager inputs af typen int, for at følge DRY-princippet
+    //Method taking input of type int and returning it in an outputInt variable
     private static int inputInt(String prompt)
     {
         //Prepares an output integer
