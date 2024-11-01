@@ -29,6 +29,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>9.4.0.jre8</version> <!-- Check for the latest JDBC 4 compatible version -->
+        </dependency>
+
     </dependencies>
 
     <build>

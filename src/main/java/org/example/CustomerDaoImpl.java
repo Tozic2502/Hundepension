@@ -35,7 +35,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public void readCustomer(String no) throws Exception{
-        String sql = "SELECT * FROM Customer WHERE dept_no = ?";
+        String sql = "SELECT * FROM Customer WHERE fldCustomerTelephoneNumber = ?";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, no);
@@ -56,7 +56,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public void readAllCustomer() throws Exception{
-        String sql = "SELECT * FROM Customer";
+        String sql = "SELECT * FROM tblCustomer";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();

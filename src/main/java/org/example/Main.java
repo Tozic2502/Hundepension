@@ -26,14 +26,23 @@ public class Main
         switch(menuNavigator)
         {
             case "kunde","1":
-                System.out.println("1: Se Kunder\n2: Opret Kunde");
+                System.out.println("1: Opret Kunde\n2: Se Kunder");
                 menuNavigator = inScanner.nextLine().toLowerCase();
 
+                CustomerDao cdao = new CustomerDaoImpl();
                 switch (menuNavigator)
                 {
                     case "opret kunde","1":
+                        Customer customer = new Customer();
+                        customer.setName(inputString("Please input customer name:"));
+                        customer.setAddress(inputString("Please input customer address:"));
+                        customer.setPhoneNumber(inputInt("Please input customer phone number:"));
+                        customer.setEmail(inputString("Please input customer email:"));
+                        cdao.createCustomer(customer);
                         break;
+
                     case "se kunde","2":
+                        cdao.readAllCustomer();
                         break;
                 }
                 break;
