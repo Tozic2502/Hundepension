@@ -1,0 +1,58 @@
+Index: src/main/java/org/example/showInformation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport org.example.view.Table;\r\n\r\nimport java.sql.SQLException;\r\nimport java.util.Date;\r\nimport java.util.Scanner;\r\n\r\npublic class showInformation {\r\n    static sqlConnetion sql = new sqlConnetion();\r\n    static boolean connection = false;\r\n    private static int selectedDog = 0;\r\n    public static void main(String[] args) throws Exception {\r\n        sql.setDatabase(\"dbDogCare\");\r\n        sql.setDestination(\"localhost\");\r\n        sql.setUsername(\"sa\");\r\n        sql.setPassword(\"1234\");\r\n\r\n        connection = sql.Connect();\r\n\r\n        System.out.println(\"Main Menu > Show Information\");\r\n        System.out.println(\" 0. Go back to Main Menu \");\r\n        System.out.println(\" 1. Show Customers Information\");\r\n        System.out.println(\" 2. Show Dogs Information\");\r\n\r\n\r\n        int i = new Scanner(System.in).nextInt();\r\n        switch (i) {\r\n            case 0:\r\n                Main.main(null);\r\n                break;\r\n            case 1:\r\n                showCustomersInformation();\r\n                break;\r\n\r\n        }\r\n    }\r\n    public static void showCustomersInformation() {\r\n        System.out.println(\"Main Menu > Show information > Customer information\");\r\n        System.out.println(\" 0. go back to Main Menu \");\r\n        System.out.println(\" 1. Search by Telephonenumber\");\r\n        System.out.println(\" 2. Search by Name\");\r\n        System.out.println(\" \");\r\n        int i = new Scanner(System.in).nextInt();\r\n        switch (i) {\r\n            case 1:\r\n                System.out.printf(\"Enter Telephonenumber : \");\r\n                int telephonenumber = new Scanner(System.in).nextInt();\r\n                try {\r\n                    if (connection) {\r\n                        Table t = new Table(new String[]{\"Telephonenumber\", \"Name\", \"E-Mail\", \"Address\"}, sql.get(\"*\", \"tblCustomer\", new String[]{\"fldCustomerTelephoneNumber = \" + telephonenumber}));\r\n                        t.print();\r\n                    } else {\r\n                        System.out.println(\"Failed to connect to database\");\r\n                    }\r\n                } catch (SQLException e) {\r\n                    throw new RuntimeException(e);\r\n                }\r\n            case 2:\r\n                System.out.printf(\"Enter Telephonenumber : \");\r\n                String name = new Scanner(System.in).next();\r\n                try {\r\n                    if (connection && name != null || name != \"\") {\r\n                        Table t = new Table(new String[]{\"Telephonenumber\", \"Name\", \"E-Mail\", \"Address\"}, sql.get(\"*\", \"tblCustomer\", new String[]{\"fldCustomerName = \" + name}));\r\n                        t.print();\r\n                    } else {\r\n                        System.out.println(\"Failed to connect to database\");\r\n                    }\r\n                } catch (SQLException e) {\r\n                    throw new RuntimeException(e);\r\n                }\r\n\r\n        }\r\n    }\r\n    public static void showDogInformation() throws SQLException {\r\n                System.out.println(\"Main Menu > Show information > Dog information\");\r\n                System.out.println(\" 0. back \");\r\n                System.out.println(\" 1. Search by Name\");\r\n                System.out.println(\" 2. Search by Owners Telephonenumber\");\r\n                System.out.println(\" \");\r\n                int i = new Scanner(System.in).nextInt();\r\n                Table t = null;\r\n                switch (i) {\r\n                    case 1:\r\n                        System.out.printf(\"Enter Name : \");\r\n                        String name = new Scanner(System.in).next();\r\n                        if (connection && name != null || name != \"\") {\r\n                             t = new Table(new String[] {\"Name\", \"Breed\", \"age\", \"breed\", \"weight\", \"ID\"}, sql.get(\"fldName, fldBreed, fldAge, fldWeight fldOwnerID\", \"tblDog\", new String[] {\"where fldName= \" + name +\";\"}));\r\n                            t.print();\r\n\r\n                        }\r\n                        System.out.println(\"Please select Dog\");\r\n                        System.out.println(\"Dog\");\r\n                        int dogSelection = new Scanner(System.in).nextInt();\r\n                        selectedDog = Integer.parseInt(t.get(dogSelection, 4));\r\n\r\n\r\n                        case 2:\r\n                            System.out.printf(\"Enter Name : \");\r\n                            int OwnerID = new Scanner(System.in).nextInt();\r\n                            if (connection && OwnerID != 0) {\r\n                                t = new Table(new String[] {\"Name\", \"Breed\", \"age\", \"breed\", \"weight\", \"ID\"}, sql.get(\"fldName, fldBreed, fldAge, fldWeight fldOwnerID\", \"tblDog\", new String[] {\"where FK_fldOwnerID= \" + OwnerID +\";\"}));\r\n                                t.print();\r\n                            }\r\n                            System.out.println(\"Please select Dog\");\r\n                            System.out.println(\"Dog\");\r\n                            dogSelection = new Scanner(System.in).nextInt();\r\n                            selectedDog = Integer.parseInt(t.get(dogSelection, 4));\r\n                            break;\r\n                            default:\r\n                                System.out.println(\"Please select a valid option\");\r\n                                break;\r\n\r\n                }\r\n\r\n\r\n\r\n    }\r\n\r\n    //select fldVaccineType, fldDateOfVaccination from tblVaccine inner join tblVet on tblVet.fldVetTelephoneNumber = tblVaccine.FK_fldVetID\r\n    public static void showVaccineInfo() {\r\n        System.out.println(\"Main Menu > Show information > Vaccine information\");\r\n        System.out.println(\" \");\r\n        Table t = new Table(new String[] {\"Vaccine Type\", \"Date\", \"Doctor\"}, sql.get(\"fldVaccineDate\"))\r\n    }\r\n    public class DateConversion {\r\n        public static void main(String[] args) {\r\n            // Assume sqlDate is your java.sql.Date instance\r\n            Date sqlDate = new Date(System.currentTimeMillis());\r\n\r\n            // Convert to java.util.Date\r\n            java.util.Date utilDate = new java.util.Date(sqlDate.getTime());\r\n\r\n            System.out.println(\"SQL Date: \" + sqlDate);\r\n            System.out.println(\"Util Date: \" + utilDate);\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+===================================================================
+diff --git a/src/main/java/org/example/showInformation.java b/src/main/java/org/example/showInformation.java
+--- a/src/main/java/org/example/showInformation.java	(revision d7f5ae1133df5d9de8b555ad3584fb784ee1aa17)
++++ b/src/main/java/org/example/showInformation.java	(date 1730456119554)
+@@ -99,7 +99,7 @@
+                             System.out.printf("Enter Name : ");
+                             int OwnerID = new Scanner(System.in).nextInt();
+                             if (connection && OwnerID != 0) {
+-                                t = new Table(new String[] {"Name", "Breed", "age", "breed", "weight", "ID"}, sql.get("fldName, fldBreed, fldAge, fldWeight fldOwnerID", "tblDog", new String[] {"where FK_fldOwnerID= " + OwnerID +";"}));
++                                t = new Table(new String[] {"Name", "Breed", "age", "breed", "weight", "ID", "Food Type"}, sql.get("fldName, fldBreed, fldAge, fldWeight,  fldOwnerID", "tblDog", new String[] {"where FK_fldOwnerID= " + OwnerID +";", "inner join fldFood"}));
+                                 t.print();
+                             }
+                             System.out.println("Please select Dog");
+@@ -112,17 +112,36 @@
+                                 break;
+ 
+                 }
+-
+-
++                System.out.println("Main Menu > Show information > Dog information > " + selectedDog + ">");
++                System.out.println(" ");
++                System.out.println("Please select the information you wish to see");
++                System.out.println(" 0. go back to Main Menu ");
++                System.out.println(" 1. Vaccineinformation");
++                System.out.println(" 2. Walkinformation");
++                System.out.println(" 2 Feedinginformation");
++                int selection = new Scanner(System.in).nextInt();
++                switch (selection) {
++                    case 0:
++                        Main.main(null);
++                        break;
++                        case 1:
++                            showVaccineInfo();
++                            break;
++                            case 2:
++
++                }
+ 
+     }
+ 
+     //select fldVaccineType, fldDateOfVaccination from tblVaccine inner join tblVet on tblVet.fldVetTelephoneNumber = tblVaccine.FK_fldVetID
+-    public static void showVaccineInfo() {
++    public static void showVaccineInfo() throws SQLException {
+         System.out.println("Main Menu > Show information > Vaccine information");
+         System.out.println(" ");
+-        Table t = new Table(new String[] {"Vaccine Type", "Date", "Doctor"}, sql.get("fldVaccineDate"))
++        Table t = new Table(new String[] {"Vaccine Type", "Date", "Doctor"}, sql.get("fldVaccineType, fldDateOfVaccination", "tblVaccine", new String[] {"where FK_fldDogID = " + selectedDog, "join tblVet on tblVet.fldVetTelephoneNumber = tblVaccine.FK_fldVetID " }));
++        t.print();
++
+     }
++
+     public class DateConversion {
+         public static void main(String[] args) {
+             // Assume sqlDate is your java.sql.Date instance
