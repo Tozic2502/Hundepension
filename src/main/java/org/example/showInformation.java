@@ -85,7 +85,7 @@ public class showInformation {
                         System.out.printf("Enter Name : ");
                         String name = new Scanner(System.in).next();
                         if (connection && name != null || name != "") {
-                             t = new Table(new String[] {"Name", "Breed", "age", "breed", "weight", "ID"}, sql.get("fldName, fldBreed, fldAge, fldWeight fldOwnerID", "tblDog", new String[] {"where fldName= " + name +";"}));
+                             t = new Table(new String[] {"Name", "Breed", "age", "breed", "weight", "ID"}, sql.get("fldName, fldBreed, fldAge, fldWeight fldOwnerID", "tblDog", new String[] {"where fldName= " + name +";", "inner join tblFoodType "}));
                             t.print();
 
                         }
@@ -114,26 +114,29 @@ public class showInformation {
                 }
 
 
+                if (selectedDog != 0) {
+                    showVaccineInfo();
+
+                }
+
+
 
     }
 
     //select fldVaccineType, fldDateOfVaccination from tblVaccine inner join tblVet on tblVet.fldVetTelephoneNumber = tblVaccine.FK_fldVetID
-    public static void showVaccineInfo() {
+    public static void showVaccineInfo() throws SQLException {
         System.out.println("Main Menu > Show information > Vaccine information");
         System.out.println(" ");
-        Table t = new Table(new String[] {"Vaccine Type", "Date", "Doctor"}, sql.get("fldVaccineDate"))
+        Table t = new Table(new String[] {"Vaccine Type", "Date", "Doctor"}, sql.get("fldVaccineType, fldVaccineDate", "tblVaccine", new String[] {"where FK_fldDogID =" + selectedDog, "inner join fldVet on tblVet.fldVetTelephoneNumber = FK_fldVetID"}));
+        t.print();
     }
-    public class DateConversion {
-        public static void main(String[] args) {
-            // Assume sqlDate is your java.sql.Date instance
-            Date sqlDate = new Date(System.currentTimeMillis());
+    public static void showFeedings( ) throws SQLException {
+// for those 2 Methods I didn't have time to research how to get the right date calculations
 
-            // Convert to java.util.Date
-            java.util.Date utilDate = new java.util.Date(sqlDate.getTime());
+    }
+    public static void showWalks( ) throws SQLException {
+// for those 2 Methods I didn't have time to research how to get the right date calculations
 
-            System.out.println("SQL Date: " + sqlDate);
-            System.out.println("Util Date: " + utilDate);
-        }
     }
 
 
