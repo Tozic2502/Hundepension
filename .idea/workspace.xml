@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Added dyrlægeDAO to master">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Added dyrlægeDAO to master" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +109,23 @@
       <option name="project" value="LOCAL" />
       <updated>1730362155920</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added dyrlægeDAO to master">
+      <option name="closed" value="true" />
+      <created>1730446649970</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730446649971</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added dyrlægeDAO to master">
+      <option name="closed" value="true" />
+      <created>1730446927044</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730446927044</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,6 +145,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init" />
     <MESSAGE value="Færdi Hund" />
-    <option name="LAST_COMMIT_MESSAGE" value="Færdi Hund" />
+    <MESSAGE value="Added dyrlægeDAO to master" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added dyrlægeDAO to master" />
   </component>
 </project>

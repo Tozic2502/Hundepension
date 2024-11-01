@@ -37,7 +37,7 @@ public class Main
 
             case "hund","2":
                 System.out.println("1: Se Hunde\n2: Opret Hund");
-                menuNavigator = inScanner.next().toLowerCase();
+                menuNavigator = inScanner.nextLine().toLowerCase();
 
                 HundDao dao = new HundDaoImpl();
 
