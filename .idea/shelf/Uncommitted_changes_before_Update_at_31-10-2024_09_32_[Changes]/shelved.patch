@@ -1,0 +1,339 @@
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n//TIP To <b>Run</b> code, press <shortcut actionId=\"Run\"/> or\r\n// click the <icon src=\"AllIcons.Actions.Execute\"/> icon in the gutter.\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n        Hund Hund = new Hund();\r\n\r\n        Hund.Hund();\r\n\r\n\r\n        }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision f58d1381ad1bf413d7b11138846e72fc8fd37f8d)
++++ b/src/main/java/org/example/Main.java	(date 1730363547597)
+@@ -1,14 +1,106 @@
+ package org.example;
+ 
+-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+-public class Main {
+-    public static void main(String[] args) {
++import java.util.Scanner;
++
++public class Main
++{
++    public static void main(String[] args) throws Exception
++    {
++        VeterinarianDao dao = new VeterinarianDaoImpl();
++        //pensionMenu();
++        System.out.println("start");
++
++        Scanner inScanner = new Scanner(System.in);
++        int menuNavigator = 0;
++        System.out.println("Goddag Rosa.\nVælg en funktion\n1: Kunde\n2: Hund\n3: Dyrlæge");
++        menuNavigator = inScanner.nextInt();
++
++        switch(menuNavigator)
++        {
++            case 1:
++                System.out.println("11: Se Kunder\n12: Opret Kunde");
++                menuNavigator = inScanner.nextInt();
++
++            case 2:
++                System.out.println("21: Se Hunde\n22: Opret Hund");
++                menuNavigator = inScanner.nextInt();
++
++            case 3:
++                System.out.println("31: Se Dyrlæger\n32: Opret Dyrlæge");
++                menuNavigator = inScanner.nextInt();
++                switch(menuNavigator)
++                {
++                    case 1:
++                        dao.readAllVeterinarians();
++
++                    case 2:
++                        Veterinarian opretVet = new Veterinarian();
++                        opretVet.setFldVetName(inputString("Skriv dyrlægens navn:"));
++                        opretVet.setFldVetAdres(inputString("Skriv dyrlægens adresse:"));
++                        opretVet.setFldVetTelephoneNumber(inputInt("Skriv dyrlægens telefonnummer:"));
++                        dao.createVeterinarian(opretVet);
++                }
++        }
++
++        System.out.println("end");
+ 
+-        Hund Hund = new Hund();
+ 
+-        Hund.Hund();
+ 
+ 
++    }
++
++    /*private static void pensionMenu()
++    {
++        Scanner inScanner = new Scanner(System.in);
++        int menuNavigator = 0;
++        System.out.println("Goddag Rosa.\nVælg en funktion\n1: Kunde\n2: Hund\n3: Dyrlæge");
++        menuNavigator = inScanner.nextInt();
++
++        switch(menuNavigator)
++        {
++            case 1:
++                System.out.println("11: Se Kunder\n12: Opret Kunde");
++                menuNavigator = inScanner.nextInt();
++
++            case 2:
++                System.out.println("21: Se Hunde\n22: Opret Hund");
++                menuNavigator = inScanner.nextInt();
++
++            case 3:
++                System.out.println("31: Se Dyrlæger\n32: Opret Dyrlæge");
++                menuNavigator = inScanner.nextInt();
++                switch(menuNavigator)
++                {
++                    case 1:
++                        dao.readAllVeterinarians();
++                }
+         }
+-}
++
++    }*/
++
++
++    public static String inputString (String prompt)
++    {
++       //Prepares an outputstring
++        String outputString = "";
++
++        Boolean isEmpty = outputString.isEmpty();
++
++        while(isEmpty)
++        {
++            System.out.println(prompt);
++
++            Scanner inputScanner = new Scanner(System.in);
++            outputString = inputScanner.nextLine();
++
++            if (!outputString.isEmpty())
++            {
++                return outputString;
++            }
++
++
++        }
++        return "Method is not working properly, please contact developer";
++    }
++
++}
+\ No newline at end of file
+Index: src/main/java/org/example/Veterinarian.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\npublic class Veterinarian\r\n{\r\n    //Instance variables\r\n    private int fldVetTelephoneNumber;\r\n    private String fldVetName;\r\n    private String fldVetAdres;\r\n\r\n    //Constructors\r\n    public Veterinarian (int fldVetTelephoneNumber, String fldVetName, String fldVetAdress)\r\n    {\r\n        this.fldVetTelephoneNumber = fldVetTelephoneNumber;\r\n        this.fldVetName = fldVetName;\r\n        this.fldVetAdres = fldVetAdress;\r\n    }\r\n\r\n    public Veterinarian()\r\n    {\r\n\r\n    }\r\n\r\n    //Getter + setter for phone no.\r\n    public int getFldVetTelephoneNumber()\r\n    {\r\n        return fldVetTelephoneNumber;\r\n    }\r\n\r\n    public void setFldVetTelephoneNumber(int fldVetTelephoneNumber)\r\n    {\r\n        this.fldVetTelephoneNumber = fldVetTelephoneNumber;\r\n    }\r\n\r\n    //Getter + setter for Vet name\r\n    public String getFldVetName()\r\n    {\r\n        return fldVetName;\r\n    }\r\n\r\n    public void setFldVetName(String fldVetName)\r\n    {\r\n        this.fldVetName = fldVetName;\r\n    }\r\n\r\n    //Getter + setter for Vet address\r\n    public String getFldVetAdres()\r\n    {\r\n        return fldVetAdres;\r\n    }\r\n\r\n    public void setFldVetAdres(String fldVetAdres)\r\n    {\r\n        this.fldVetAdres = fldVetAdres;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Veterinarian.java b/src/main/java/org/example/Veterinarian.java
+--- a/src/main/java/org/example/Veterinarian.java	(revision f58d1381ad1bf413d7b11138846e72fc8fd37f8d)
++++ b/src/main/java/org/example/Veterinarian.java	(date 1730360345471)
+@@ -20,6 +20,8 @@
+ 
+     }
+ 
++
++
+     //Getter + setter for phone no.
+     public int getFldVetTelephoneNumber()
+     {
+Index: src/main/java/org/example/VeterinarianDaoImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.sql.*;\r\n\r\npublic class VeterinarianDaoImpl implements VeterinarianDao\r\n{\r\n    private static final String URL = \"jdbc:sqlserver://localhost:1433;databaseName=dbDogCare\";\r\n    private static final String USERNAME = \"sa\"; // replace with your username\r\n    private static final String PASSWORD = \"sqlserver1234\"; // replace with your password\r\n\r\n    public static Connection getConnection() throws Exception {\r\n        Connection conn = null;\r\n        Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\");\r\n        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);\r\n        System.out.println(\"Connected to the database.\");\r\n        return conn;\r\n    }\r\n\r\n    @Override\r\n    public void createVeterinarian(Veterinarian veterinarian) throws Exception {\r\n        String sql = \"INSERT INTO tblVet VALUES (?, ?, ?)\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setInt(1, veterinarian.getFldVetTelephoneNumber());\r\n        pstmt.setString(2, veterinarian.getFldVetName());\r\n        pstmt.setString(3, veterinarian.getFldVetAdres());\r\n        int affectedRows = pstmt.executeUpdate();\r\n        if (affectedRows > 0) {\r\n            System.out.println(\"Department added successfully.\");\r\n        } else {\r\n            System.out.println(\"Failed to add the department.\");\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readVeterinarian(int fldVetTelephoneNumber) throws Exception{\r\n        String sql = \"SELECT * FROM tblVet WHERE fldVetTelephoneNumber = ?\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setInt(1, fldVetTelephoneNumber);\r\n        ResultSet rs = pstmt.executeQuery();\r\n        if (rs.next()) {\r\n            Veterinarian veterinarian = new Veterinarian();\r\n            veterinarian.setFldVetTelephoneNumber(rs.getInt(1));\r\n            veterinarian.setFldVetName(rs.getString(2));\r\n            veterinarian.setFldVetAdres(rs.getString(3));\r\n            System.out.printf(veterinarian.getFldVetName() + \" \"+ veterinarian.getFldVetAdres()+ \" \"+ veterinarian.getFldVetTelephoneNumber());\r\n        } else {\r\n            System.out.println(\"No veterinarian found with tlf. nr. \" + fldVetTelephoneNumber);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readAllVeterinarians() throws Exception{\r\n        String sql = \"SELECT * FROM tblVet\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        ResultSet rs = pstmt.executeQuery();\r\n        boolean hasVeterinarians = false;\r\n        while (rs.next()) {\r\n            hasVeterinarians = true;\r\n            Veterinarian veterinarian = new Veterinarian();\r\n            veterinarian.setFldVetTelephoneNumber(rs.getInt(1));\r\n            veterinarian.setFldVetName(rs.getString(2));\r\n            veterinarian.setFldVetAdres(rs.getString(3));\r\n            System.out.println(veterinarian.getFldVetName()+\" \"+ veterinarian.getFldVetAdres()+\" \"+veterinarian.getFldVetTelephoneNumber());\r\n        }\r\n        if (!hasVeterinarians) {\r\n            System.out.println(\"No veterinarians found.\");\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/VeterinarianDaoImpl.java b/src/main/java/org/example/VeterinarianDaoImpl.java
+--- a/src/main/java/org/example/VeterinarianDaoImpl.java	(revision f58d1381ad1bf413d7b11138846e72fc8fd37f8d)
++++ b/src/main/java/org/example/VeterinarianDaoImpl.java	(date 1730360345497)
+@@ -26,9 +26,9 @@
+         pstmt.setString(3, veterinarian.getFldVetAdres());
+         int affectedRows = pstmt.executeUpdate();
+         if (affectedRows > 0) {
+-            System.out.println("Department added successfully.");
++            System.out.println("Veterinarian added successfully.");
+         } else {
+-            System.out.println("Failed to add the department.");
++            System.out.println("Failed to add the veterinarian.");
+         }
+     }
+ 
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>org.example</groupId>\r\n    <artifactId>Hundepension</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>22</maven.compiler.source>\r\n        <maven.compiler.target>22</maven.compiler.target>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n        <kotlin.version>2.0.21</kotlin.version>\r\n    </properties>\r\n\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>org.jetbrains.kotlin</groupId>\r\n            <artifactId>kotlin-stdlib-jdk8</artifactId>\r\n            <version>${kotlin.version}</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.jetbrains.kotlin</groupId>\r\n            <artifactId>kotlin-test</artifactId>\r\n            <version>${kotlin.version}</version>\r\n            <scope>test</scope>\r\n        </dependency>\r\n    </dependencies>\r\n\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>org.jetbrains.kotlin</groupId>\r\n                <artifactId>kotlin-maven-plugin</artifactId>\r\n                <version>${kotlin.version}</version>\r\n                <executions>\r\n                    <execution>\r\n                        <id>compile</id>\r\n                        <phase>compile</phase>\r\n                        <goals>\r\n                            <goal>compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>test-compile</id>\r\n                        <phase>test-compile</phase>\r\n                        <goals>\r\n                            <goal>test-compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                </executions>\r\n                <configuration>\r\n                    <jvmTarget>${maven.compiler.target}</jvmTarget>\r\n                </configuration>\r\n            </plugin>\r\n            <plugin>\r\n                <groupId>org.apache.maven.plugins</groupId>\r\n                <artifactId>maven-compiler-plugin</artifactId>\r\n                <executions>\r\n                    <execution>\r\n                        <id>default-compile</id>\r\n                        <phase>none</phase>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>default-testCompile</id>\r\n                        <phase>none</phase>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>compile</id>\r\n                        <phase>compile</phase>\r\n                        <goals>\r\n                            <goal>compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>testCompile</id>\r\n                        <phase>test-compile</phase>\r\n                        <goals>\r\n                            <goal>testCompile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                </executions>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision f58d1381ad1bf413d7b11138846e72fc8fd37f8d)
++++ b/pom.xml	(date 1730360345525)
+@@ -21,12 +21,14 @@
+             <artifactId>kotlin-stdlib-jdk8</artifactId>
+             <version>${kotlin.version}</version>
+         </dependency>
++
+         <dependency>
+             <groupId>org.jetbrains.kotlin</groupId>
+             <artifactId>kotlin-test</artifactId>
+             <version>${kotlin.version}</version>
+             <scope>test</scope>
+         </dependency>
++
+     </dependencies>
+ 
+     <build>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"Init\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/vcs.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/example/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/example/Main.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;Tozic2502&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/Tozic2502/Hundepension.git&quot;,\r\n    &quot;accountId&quot;: &quot;cdcde6aa-55f5-4b0f-90a6-57cf4685cd04&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 6\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2o6wNRrcmA3ZZERts5SJw19MNRK\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  },\r\n  &quot;keyToStringList&quot;: {\r\n    &quot;DatabaseDriversLRU&quot;: [\r\n      &quot;sqlserver&quot;\r\n    ]\r\n  }\r\n}</component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\" />\r\n      <created>1730203296959</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1730203296959</updated>\r\n      <workItem from=\"1730203298100\" duration=\"743000\" />\r\n      <workItem from=\"1730272878094\" duration=\"247000\" />\r\n      <workItem from=\"1730273346893\" duration=\"111000\" />\r\n      <workItem from=\"1730273875617\" duration=\"564000\" />\r\n      <workItem from=\"1730274450953\" duration=\"197000\" />\r\n      <workItem from=\"1730274703128\" duration=\"9000\" />\r\n      <workItem from=\"1730274834278\" duration=\"579000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Init\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1730203392870</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1730203392870</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Init\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Init\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision f58d1381ad1bf413d7b11138846e72fc8fd37f8d)
++++ b/.idea/workspace.xml	(date 1730363338872)
+@@ -4,10 +4,13 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Init">
+-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
++    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="">
++      <change beforePath="$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Veterinarian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Veterinarian.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/VeterinarianDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/VeterinarianDaoImpl.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -17,6 +20,8 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
++        <option value="Kotlin Interface" />
++        <option value="Interface" />
+         <option value="Class" />
+       </list>
+     </option>
+@@ -24,7 +29,7 @@
+   <component name="Git.Settings">
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$" value="master" />
++        <entry key="$PROJECT_DIR$" value="RegisterWalk" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -32,13 +37,13 @@
+   <component name="GitHubPullRequestSearchHistory">{
+   &quot;lastFilter&quot;: {
+     &quot;state&quot;: &quot;OPEN&quot;,
+-    &quot;assignee&quot;: &quot;Tozic2502&quot;
++    &quot;assignee&quot;: &quot;Jepasej&quot;
+   }
+ }</component>
+   <component name="GithubPullRequestsUISettings">{
+   &quot;selectedUrlAndAccountId&quot;: {
+     &quot;url&quot;: &quot;https://github.com/Tozic2502/Hundepension.git&quot;,
+-    &quot;accountId&quot;: &quot;cdcde6aa-55f5-4b0f-90a6-57cf4685cd04&quot;
++    &quot;accountId&quot;: &quot;1cccc2f7-528a-4676-bf45-2f0a50e7b0ff&quot;
+   }
+ }</component>
+   <component name="ProjectColorInfo">{
+@@ -51,31 +56,30 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+-  },
+-  &quot;keyToStringList&quot;: {
+-    &quot;DatabaseDriversLRU&quot;: [
+-      &quot;sqlserver&quot;
+-    ]
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "Application.Main.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "git-widget-placeholder": "master",
++    "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "C:/Users/jeppe/Documents/sqljdbc4.jar",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "onboarding.tips.debug.path": "C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java",
++    "project.structure.last.edited": "Modules",
++    "project.structure.proportion": "0.15",
++    "project.structure.side.proportion": "0.2",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
++        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
++        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -87,23 +91,9 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1730203296959</updated>
+-      <workItem from="1730203298100" duration="743000" />
+-      <workItem from="1730272878094" duration="247000" />
+-      <workItem from="1730273346893" duration="111000" />
+-      <workItem from="1730273875617" duration="564000" />
+-      <workItem from="1730274450953" duration="197000" />
+-      <workItem from="1730274703128" duration="9000" />
+-      <workItem from="1730274834278" duration="579000" />
++      <workItem from="1730203298100" duration="38000" />
++      <workItem from="1730203814983" duration="8127000" />
+     </task>
+-    <task id="LOCAL-00001" summary="Init">
+-      <option name="closed" value="true" />
+-      <created>1730203392870</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1730203392870</updated>
+-    </task>
+-    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -120,8 +110,4 @@
+       </map>
+     </option>
+   </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Init" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Init" />
+-  </component>
+ </project>
+\ No newline at end of file

@@ -1,0 +1,958 @@
+Index: src/main/java/org/example/HundDaoImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\nimport java.sql.*;\r\n\r\npublic class HundDaoImpl implements HundDao {\r\n\r\n    private static final String URL = \"jdbc:sqlserver://localhost;portNumber=1433;databaseName=sample\";\r\n    private static final String USERNAME = \"sa\"; // replace with your username\r\n    private static final String PASSWORD = \"1234\"; // replace with your password\r\n\r\n    public static Connection getConnection() throws Exception {\r\n        Connection conn = null;\r\n        Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\");\r\n        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);\r\n        System.out.println(\"Connected to the database.\");\r\n        return conn;\r\n    }\r\n\r\n    @Override\r\n    public void createHund(Hund hund) throws Exception {\r\n        String sql = \"INSERT INTO tblDog VALUES (?, ?, ?, ?, ?)\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setString(1, hund.getName());\r\n        pstmt.setInt(2, hund.getAge());\r\n        pstmt.setString(3, hund.getBreed());\r\n        pstmt.setInt(4, hund.getWeight());\r\n        pstmt.setInt(5, hund.getID());\r\n        int affectedRows = pstmt.executeUpdate();\r\n        if (affectedRows > 0) {\r\n            System.out.println(\"Hund added successfully.\");\r\n        } else {\r\n            System.out.println(\"Failed to add the Hund.\");\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readHund(int id) throws Exception{\r\n        String sql = \"SELECT * FROM tblDog WHERE tblID = ?\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setInt(1, id);\r\n        ResultSet rs = pstmt.executeQuery();\r\n        if (rs.next()) {\r\n            Hund hund = new Hund();\r\n            hund.setName(rs.getString(1));\r\n            hund.setAge(rs.getInt(2));\r\n            hund.setBreed(rs.getString(3));\r\n            hund.setWeight(rs.getInt(4));\r\n\r\n            System.out.println(hund.getName() + \" \"+ hund.getAge()+ \" \"+ hund.getBreed()+ \" \"+ hund.getWeight());\r\n        } else {\r\n            System.out.println(\"No Hund found with ID: \" + id);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readAllHund() throws Exception{\r\n        String sql = \"SELECT * FROM tblDog\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        ResultSet rs = pstmt.executeQuery();\r\n        boolean hasDog = false;\r\n        while (rs.next()) {\r\n            hasDog = true;\r\n            Hund hund = new Hund();\r\n            hund.setName(rs.getString(1));\r\n            hund.setAge(rs.getInt(2));\r\n            hund.setBreed(rs.getString(3));\r\n            hund.setWeight(rs.getInt(4));\r\n            hund.setID(rs.getInt(5));\r\n            System.out.println(hund.getID()+\" \"+ hund.getName()+hund.getBreed()+hund.getWeight()+\" \"+ hund.getAge());\r\n        }\r\n        if (!hasDog) {\r\n            System.out.println(\"No departments found.\");\r\n        }\r\n    }\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/HundDaoImpl.java b/src/main/java/org/example/HundDaoImpl.java
+--- a/src/main/java/org/example/HundDaoImpl.java	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/src/main/java/org/example/HundDaoImpl.java	(date 1730362031565)
+@@ -3,7 +3,7 @@
+ 
+ public class HundDaoImpl implements HundDao {
+ 
+-    private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=sample";
++    private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=dbDogCare";
+     private static final String USERNAME = "sa"; // replace with your username
+     private static final String PASSWORD = "1234"; // replace with your password
+ 
+@@ -17,14 +17,13 @@
+ 
+     @Override
+     public void createHund(Hund hund) throws Exception {
+-        String sql = "INSERT INTO tblDog VALUES (?, ?, ?, ?, ?)";
++        String sql = "INSERT INTO tblDog(fldName, fldAge, fldBreed, fldWeight) VALUES (?, ?, ?, ?)";
+         Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         pstmt.setString(1, hund.getName());
+         pstmt.setInt(2, hund.getAge());
+         pstmt.setString(3, hund.getBreed());
+         pstmt.setInt(4, hund.getWeight());
+-        pstmt.setInt(5, hund.getID());
+         int affectedRows = pstmt.executeUpdate();
+         if (affectedRows > 0) {
+             System.out.println("Hund added successfully.");
+@@ -67,8 +66,7 @@
+             hund.setAge(rs.getInt(2));
+             hund.setBreed(rs.getString(3));
+             hund.setWeight(rs.getInt(4));
+-            hund.setID(rs.getInt(5));
+-            System.out.println(hund.getID()+" "+ hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
++            System.out.println(hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
+         }
+         if (!hasDog) {
+             System.out.println("No departments found.");
+Index: src/main/java/org/example/HundDao.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n\r\npublic interface HundDao {\r\n    void readHund(int no) throws Exception;\r\n    void readAllHund() throws Exception;\r\n    void createHund(Hund hund) throws Exception;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/HundDao.java b/src/main/java/org/example/HundDao.java
+--- a/src/main/java/org/example/HundDao.java	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/src/main/java/org/example/HundDao.java	(date 1730362031563)
+@@ -2,7 +2,7 @@
+ 
+ 
+ public interface HundDao {
+-    void readHund(int no) throws Exception;
++    void readHund(int id) throws Exception;
+     void readAllHund() throws Exception;
+     void createHund(Hund hund) throws Exception;
+ }
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n//TIP To <b>Run</b> code, press <shortcut actionId=\"Run\"/> or\r\n// click the <icon src=\"AllIcons.Actions.Execute\"/> icon in the gutter.\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n\r\n\r\n        }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/src/main/java/org/example/Main.java	(date 1730362031567)
+@@ -1,11 +1,43 @@
+ package org.example;
+ 
++
++import java.util.Scanner;
++
+ //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+ // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+ public class Main {
+-    public static void main(String[] args) {
++    public static void main(String[] args) throws Exception {
++
++        String name;
++        int age;
++        String breed;
++        int weight;
++
++
++        System.out.println("start");
++        Scanner scN = new Scanner(System.in);//Scanner to check inputs
++        System.out.print("Enter the name of the dog: ");
++        name = scN.next();
++        Scanner scA = new Scanner(System.in);//Scanner to check inputs
++        System.out.print("Enter the age of the dog: ");
++        age = scA.nextInt();
++        Scanner scB = new Scanner(System.in);//Scanner to check inputs
++        System.out.print("Enter the breed: ");
++        breed = scB.next();
++        Scanner scW = new Scanner(System.in);//Scanner to check inputs
++        System.out.print("Enter the weight of the dog: ");
++        weight = scW.nextInt();
++
++        HundDao dao = new HundDaoImpl();
+ 
++        //dao.readHund(1);
+ 
++        Hund d = new Hund(name, age, breed, weight);
++        dao.createHund(d);
++
++        dao.readAllHund();
++
++        System.out.println("slut");
+ 
+         }
+ }
+Index: src/main/java/org/example/Hund.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.util.Scanner;\r\n\r\npublic class Hund {\r\n        private String name;\r\n        private int age;\r\n        private String breed;\r\n        private int weight;\r\n        private int id;\r\n\r\n    public void Hund(String name, int age, String breed, int weight) {\r\n        Scanner scN = new Scanner(System.in);//Scanner to check inputs\r\n        this.name = scN.next();\r\n        Scanner scA = new Scanner(System.in);//Scanner to check inputs\r\n        this.age = scA.nextInt();\r\n        Scanner scB = new Scanner(System.in);//Scanner to check inputs\r\n        this.breed = scB.next();\r\n        Scanner scW = new Scanner(System.in);//Scanner to check inputs\r\n        this.weight = scW.nextInt();\r\n\r\n        System.out.printf(name + \"\\t\" + \"Age:\" + age + \"\\t\" + breed + \"\\t\" + weight + \"kg\");\r\n\r\n\r\n    }\r\n\r\n    public Hund() {\r\n\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n\r\n    public void setName(String name) {\r\n        Scanner scN = new Scanner(System.in);//Scanner to check inputs\r\n        System.out.println(\"Enter the name of the Dog: \");\r\n        this.name = scN.next();\r\n    }\r\n\r\n\r\n    public int getAge() {\r\n        return age;\r\n    }\r\n\r\n\r\n    public void setAge(int age) {\r\n        Scanner scA = new Scanner(System.in);//Scanner to check inputs\r\n        System.out.println(\"Enter the age of the Dog: \");\r\n        this.age = scA.nextInt();\r\n    }\r\n\r\n    public String getBreed() {\r\n        return breed;\r\n    }\r\n\r\n    public void setBreed(String breed) {\r\n        Scanner scB = new Scanner(System.in);//Scanner to check inputs\r\n        System.out.println(\"Enter the breed of the Dog: \");\r\n        this.breed = scB.next();\r\n    }\r\n    public void setWeight(int weight){\r\n        Scanner scW = new Scanner(System.in);\r\n        System.out.println(\"Enter the weight of the Dog: \");\r\n        this.weight = scW.nextInt();\r\n    }\r\n    public int getWeight(){\r\n        return weight;\r\n    }\r\n    public int getID(){\r\n        return id;\r\n    }\r\n    public void setID(int id){\r\n        this.id = id;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Hund.java b/src/main/java/org/example/Hund.java
+--- a/src/main/java/org/example/Hund.java	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/src/main/java/org/example/Hund.java	(date 1730362031560)
+@@ -1,5 +1,6 @@
+ package org.example;
+ 
++
+ import java.util.Scanner;
+ 
+ public class Hund {
+@@ -9,17 +10,13 @@
+         private int weight;
+         private int id;
+ 
+-    public void Hund(String name, int age, String breed, int weight) {
+-        Scanner scN = new Scanner(System.in);//Scanner to check inputs
+-        this.name = scN.next();
+-        Scanner scA = new Scanner(System.in);//Scanner to check inputs
+-        this.age = scA.nextInt();
+-        Scanner scB = new Scanner(System.in);//Scanner to check inputs
+-        this.breed = scB.next();
+-        Scanner scW = new Scanner(System.in);//Scanner to check inputs
+-        this.weight = scW.nextInt();
++    public Hund(String name, int age, String breed, int weight) {;
++        this.name = name;
++        this.age = age;
++        this.breed = breed;
++        this.weight = weight;
+ 
+-        System.out.printf(name + "\t" + "Age:" + age + "\t" + breed + "\t" + weight + "kg");
++        System.out.printf(name + "\t" + "Age:" + age + "\t" + breed + "\t" + weight + "kg\n");
+ 
+ 
+     }
+@@ -35,7 +32,7 @@
+ 
+     public void setName(String name) {
+         Scanner scN = new Scanner(System.in);//Scanner to check inputs
+-        System.out.println("Enter the name of the Dog: ");
++
+         this.name = scN.next();
+     }
+ 
+@@ -47,7 +44,7 @@
+ 
+     public void setAge(int age) {
+         Scanner scA = new Scanner(System.in);//Scanner to check inputs
+-        System.out.println("Enter the age of the Dog: ");
++
+         this.age = scA.nextInt();
+     }
+ 
+@@ -57,22 +54,17 @@
+ 
+     public void setBreed(String breed) {
+         Scanner scB = new Scanner(System.in);//Scanner to check inputs
+-        System.out.println("Enter the breed of the Dog: ");
++
+         this.breed = scB.next();
+     }
+     public void setWeight(int weight){
+         Scanner scW = new Scanner(System.in);
+-        System.out.println("Enter the weight of the Dog: ");
++
+         this.weight = scW.nextInt();
+     }
+     public int getWeight(){
+         return weight;
+     }
+-    public int getID(){
+-        return id;
+-    }
+-    public void setID(int id){
+-        this.id = id;
+-    }
++
+ 
+ }
+Index: .idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml b/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml
+--- a/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml	(date 1730362031553)
+@@ -16986,7 +16986,15 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5598" parent="5593" name="tblFeeding">
++    <table id="5598" parent="5593" name="tblDog">
++      <CreatedTimestamp>2024-10-31.09:42:43.247</CreatedTimestamp>
++      <DataRetentionPeriod>-1</DataRetentionPeriod>
++      <ModifiedTimestamp>2024-10-31.09:42:45.873</ModifiedTimestamp>
++      <ObjectId>1525580473</ObjectId>
++      <LobDataSpaceId>0</LobDataSpaceId>
++      <PartitionDataSpaceId>1</PartitionDataSpaceId>
++    </table>
++    <table id="5599" parent="5593" name="tblFeeding">
+       <CreatedTimestamp>2024-10-30.09:19:45.517</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.517</ModifiedTimestamp>
+@@ -16994,7 +17002,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5599" parent="5593" name="tblFleaTreatment">
++    <table id="5600" parent="5593" name="tblFleaTreatment">
+       <CreatedTimestamp>2024-10-30.09:19:45.510</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.510</ModifiedTimestamp>
+@@ -17002,7 +17010,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5600" parent="5593" name="tblFoodType">
++    <table id="5601" parent="5593" name="tblFoodType">
+       <CreatedTimestamp>2024-10-30.09:19:45.500</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.507</ModifiedTimestamp>
+@@ -17010,7 +17018,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5601" parent="5593" name="tblMedicalTreatment">
++    <table id="5602" parent="5593" name="tblMedicalTreatment">
+       <CreatedTimestamp>2024-10-30.09:19:45.523</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.523</ModifiedTimestamp>
+@@ -17018,7 +17026,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5602" parent="5593" name="tblStay">
++    <table id="5603" parent="5593" name="tblStay">
+       <CreatedTimestamp>2024-10-30.09:19:45.513</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.513</ModifiedTimestamp>
+@@ -17026,7 +17034,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5603" parent="5593" name="tblVaccine">
++    <table id="5604" parent="5593" name="tblVaccine">
+       <CreatedTimestamp>2024-10-30.09:19:45.510</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.510</ModifiedTimestamp>
+@@ -17034,7 +17042,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5604" parent="5593" name="tblVet">
++    <table id="5605" parent="5593" name="tblVet">
+       <CreatedTimestamp>2024-10-30.09:19:45.493</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.513</ModifiedTimestamp>
+@@ -17042,7 +17050,7 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <table id="5605" parent="5593" name="tblWalk">
++    <table id="5606" parent="5593" name="tblWalk">
+       <CreatedTimestamp>2024-10-30.09:19:45.520</CreatedTimestamp>
+       <DataRetentionPeriod>-1</DataRetentionPeriod>
+       <ModifiedTimestamp>2024-10-30.09:19:45.520</ModifiedTimestamp>
+@@ -17050,81 +17058,81 @@
+       <LobDataSpaceId>0</LobDataSpaceId>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </table>
+-    <column id="5606" parent="5596" name="fldCustomerTelephoneNumber">
++    <column id="5607" parent="5596" name="fldCustomerTelephoneNumber">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5607" parent="5596" name="fldCustomerName">
++    <column id="5608" parent="5596" name="fldCustomerName">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>nchar(100 char)|0s</StoredType>
+     </column>
+-    <column id="5608" parent="5596" name="fldCustomerMail">
++    <column id="5609" parent="5596" name="fldCustomerMail">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>nchar(60 char)|0s</StoredType>
+     </column>
+-    <column id="5609" parent="5596" name="fldCustomerAdress">
++    <column id="5610" parent="5596" name="fldCustomerAdress">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>nchar(256 char)|0s</StoredType>
+     </column>
+-    <index id="5610" parent="5596" name="UQ__tblCusto__B6CD70F2705EF453">
++    <index id="5611" parent="5596" name="UQ__tblCusto__B6CD70F2705EF453">
+       <ColNames>fldCustomerTelephoneNumber</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5611" parent="5596" name="UQ__tblCusto__B6CD70F2705EF453">
++    <key id="5612" parent="5596" name="UQ__tblCusto__B6CD70F2705EF453">
+       <CreatedTimestamp>2024-10-30.09:19:45.503</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.503</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>981578535</ObjectId>
+       <UnderlyingIndexName>UQ__tblCusto__B6CD70F2705EF453</UnderlyingIndexName>
+     </key>
+-    <column id="5612" parent="5597" name="fldID">
++    <column id="5613" parent="5597" name="fldID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5613" parent="5597" name="fldName">
++    <column id="5614" parent="5597" name="fldName">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>nchar(50 char)|0s</StoredType>
+     </column>
+-    <column id="5614" parent="5597" name="fldBreed">
++    <column id="5615" parent="5597" name="fldBreed">
+       <Position>3</Position>
+       <StoredType>nchar(50 char)|0s</StoredType>
+     </column>
+-    <column id="5615" parent="5597" name="FK_fldDefaultVet">
++    <column id="5616" parent="5597" name="FK_fldDefaultVet">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5616" parent="5597" name="FK_fldOwnerID">
++    <column id="5617" parent="5597" name="FK_fldOwnerID">
+       <NotNull>1</NotNull>
+       <Position>5</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5617" parent="5597" name="FK_fldFoodID">
++    <column id="5618" parent="5597" name="FK_fldFoodID">
+       <NotNull>1</NotNull>
+       <Position>6</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5618" parent="5597" name="fldAge">
++    <column id="5619" parent="5597" name="fldAge">
+       <NotNull>1</NotNull>
+       <Position>7</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5619" parent="5597" name="fldWeight">
++    <column id="5620" parent="5597" name="fldWeight">
+       <NotNull>1</NotNull>
+       <Position>8</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5620" parent="5597" name="FK__tblDog__fldWeigh__3D5E1FD2">
++    <foreign-key id="5621" parent="5597" name="FK__tblDog__fldWeigh__3D5E1FD2">
+       <ColNames>FK_fldDefaultVet</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.507</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.507</ModifiedTimestamp>
+@@ -17134,7 +17142,7 @@
+       <RefTableId>901578250</RefTableId>
+       <RefTableName>tblVet</RefTableName>
+     </foreign-key>
+-    <foreign-key id="5621" parent="5597" name="FK__tblDog__FK_fldOw__3E52440B">
++    <foreign-key id="5622" parent="5597" name="FK__tblDog__FK_fldOw__3E52440B">
+       <ColNames>FK_fldOwnerID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.507</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.507</ModifiedTimestamp>
+@@ -17144,7 +17152,7 @@
+       <RefTableId>965578478</RefTableId>
+       <RefTableName>tblCustomer</RefTableName>
+     </foreign-key>
+-    <foreign-key id="5622" parent="5597" name="FK__tblDog__FK_fldFo__3F466844">
++    <foreign-key id="5623" parent="5597" name="FK__tblDog__FK_fldFo__3F466844">
+       <ColNames>FK_fldFoodID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.507</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.507</ModifiedTimestamp>
+@@ -17154,42 +17162,118 @@
+       <RefTableId>933578364</RefTableId>
+       <RefTableName>tblFoodType</RefTableName>
+     </foreign-key>
+-    <index id="5623" parent="5597" name="UQ__tblDog__36326BC250DBD444">
++    <index id="5624" parent="5597" name="UQ__tblDog__36326BC250DBD444">
+       <ColNames>fldID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5624" parent="5597" name="UQ__tblDog__36326BC250DBD444">
++    <key id="5625" parent="5597" name="UQ__tblDog__36326BC250DBD444">
+       <CreatedTimestamp>2024-10-30.09:19:45.507</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.507</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1013578649</ObjectId>
+       <UnderlyingIndexName>UQ__tblDog__36326BC250DBD444</UnderlyingIndexName>
+     </key>
+-    <column id="5625" parent="5598" name="fldFeedingID">
++    <column id="5626" parent="5598" name="fldID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5626" parent="5598" name="fldDate">
++    <column id="5627" parent="5598" name="fldName">
++      <NotNull>1</NotNull>
++      <Position>2</Position>
++      <StoredType>nchar(50 char)|0s</StoredType>
++    </column>
++    <column id="5628" parent="5598" name="fldBreed">
++      <Position>3</Position>
++      <StoredType>nchar(50 char)|0s</StoredType>
++    </column>
++    <column id="5629" parent="5598" name="FK_fldDefaultVet">
++      <Position>4</Position>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <column id="5630" parent="5598" name="FK_fldOwnerID">
++      <Position>5</Position>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <column id="5631" parent="5598" name="FK_fldFoodID">
++      <Position>6</Position>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <column id="5632" parent="5598" name="fldAge">
++      <NotNull>1</NotNull>
++      <Position>7</Position>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <column id="5633" parent="5598" name="fldWeight">
++      <NotNull>1</NotNull>
++      <Position>8</Position>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <foreign-key id="5634" parent="5598" name="FK__tblDog__fldWeigh__3D5E1FD2">
++      <ColNames>FK_fldDefaultVet</ColNames>
++      <CreatedTimestamp>2024-10-31.09:42:43.870</CreatedTimestamp>
++      <ModifiedTimestamp>2024-10-31.09:42:43.870</ModifiedTimestamp>
++      <ObjectId>1557580587</ObjectId>
++      <RefColNames>fldVetTelephoneNumber</RefColNames>
++      <RefTableId>901578250</RefTableId>
++      <RefTableName>tblVet</RefTableName>
++    </foreign-key>
++    <foreign-key id="5635" parent="5598" name="FK__tblDog__FK_fldOw__3E52440B">
++      <ColNames>FK_fldOwnerID</ColNames>
++      <CreatedTimestamp>2024-10-31.09:42:43.873</CreatedTimestamp>
++      <ModifiedTimestamp>2024-10-31.09:42:43.873</ModifiedTimestamp>
++      <ObjectId>1573580644</ObjectId>
++      <RefColNames>fldCustomerTelephoneNumber</RefColNames>
++      <RefTableId>965578478</RefTableId>
++      <RefTableName>tblCustomer</RefTableName>
++    </foreign-key>
++    <foreign-key id="5636" parent="5598" name="FK__tblDog__FK_fldFo__3F466844">
++      <ColNames>FK_fldFoodID</ColNames>
++      <CreatedTimestamp>2024-10-31.09:42:43.873</CreatedTimestamp>
++      <ModifiedTimestamp>2024-10-31.09:42:43.873</ModifiedTimestamp>
++      <ObjectId>1589580701</ObjectId>
++      <RefColNames>fldFoodID</RefColNames>
++      <RefTableId>933578364</RefTableId>
++      <RefTableName>tblFoodType</RefTableName>
++    </foreign-key>
++    <index id="5637" parent="5598" name="UQ__tblDog__36326BC250DBD444">
++      <ColNames>fldID</ColNames>
++      <Position>2</Position>
++      <Unique>1</Unique>
++      <PartitionDataSpaceId>1</PartitionDataSpaceId>
++    </index>
++    <key id="5638" parent="5598" name="UQ__tblDog__36326BC250DBD444">
++      <CreatedTimestamp>2024-10-31.09:42:43.867</CreatedTimestamp>
++      <ModifiedTimestamp>2024-10-31.09:42:43.867</ModifiedTimestamp>
++      <ObjectId>1541580530</ObjectId>
++      <UnderlyingIndexName>UQ__tblDog__36326BC250DBD444</UnderlyingIndexName>
++    </key>
++    <column id="5639" parent="5599" name="fldFeedingID">
++      <NotNull>1</NotNull>
++      <Position>1</Position>
++      <SequenceIdentity>1</SequenceIdentity>
++      <StoredType>int|0s</StoredType>
++    </column>
++    <column id="5640" parent="5599" name="fldDate">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5627" parent="5598" name="fldTime">
++    <column id="5641" parent="5599" name="fldTime">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>time|0s</StoredType>
+     </column>
+-    <column id="5628" parent="5598" name="FK_fldDogID">
++    <column id="5642" parent="5599" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5629" parent="5598" name="FK__tblFeedin__FK_fl__4CA06362">
++    <foreign-key id="5643" parent="5599" name="FK__tblFeedin__FK_fl__4CA06362">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.520</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.520</ModifiedTimestamp>
+@@ -17199,37 +17283,37 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5630" parent="5598" name="UQ__tblFeedi__52C212D83E1CF0B9">
++    <index id="5644" parent="5599" name="UQ__tblFeedi__52C212D83E1CF0B9">
+       <ColNames>fldFeedingID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5631" parent="5598" name="UQ__tblFeedi__52C212D83E1CF0B9">
++    <key id="5645" parent="5599" name="UQ__tblFeedi__52C212D83E1CF0B9">
+       <CreatedTimestamp>2024-10-30.09:19:45.520</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.520</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1269579561</ObjectId>
+       <UnderlyingIndexName>UQ__tblFeedi__52C212D83E1CF0B9</UnderlyingIndexName>
+     </key>
+-    <column id="5632" parent="5599" name="fldTreatmentID">
++    <column id="5646" parent="5600" name="fldTreatmentID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5633" parent="5599" name="FK_fldVetID">
++    <column id="5647" parent="5600" name="FK_fldVetID">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5634" parent="5599" name="FK_fldDogID">
++    <column id="5648" parent="5600" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5635" parent="5599" name="FK__tblFleaTr__FK_fl__45F365D3">
++    <foreign-key id="5649" parent="5600" name="FK__tblFleaTr__FK_fl__45F365D3">
+       <ColNames>FK_fldVetID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.513</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.513</ModifiedTimestamp>
+@@ -17239,7 +17323,7 @@
+       <RefTableId>901578250</RefTableId>
+       <RefTableName>tblVet</RefTableName>
+     </foreign-key>
+-    <foreign-key id="5636" parent="5599" name="FK__tblFleaTr__FK_fl__46E78A0C">
++    <foreign-key id="5650" parent="5600" name="FK__tblFleaTr__FK_fl__46E78A0C">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.513</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.513</ModifiedTimestamp>
+@@ -17249,71 +17333,71 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5637" parent="5599" name="UQ__tblFleaT__D74159699B8C3047">
++    <index id="5651" parent="5600" name="UQ__tblFleaT__D74159699B8C3047">
+       <ColNames>fldTreatmentID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5638" parent="5599" name="UQ__tblFleaT__D74159699B8C3047">
++    <key id="5652" parent="5600" name="UQ__tblFleaT__D74159699B8C3047">
+       <CreatedTimestamp>2024-10-30.09:19:45.513</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.513</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1157579162</ObjectId>
+       <UnderlyingIndexName>UQ__tblFleaT__D74159699B8C3047</UnderlyingIndexName>
+     </key>
+-    <column id="5639" parent="5600" name="fldFoodID">
++    <column id="5653" parent="5601" name="fldFoodID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5640" parent="5600" name="fldFoodName">
++    <column id="5654" parent="5601" name="fldFoodName">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>nchar(10 char)|0s</StoredType>
+     </column>
+-    <index id="5641" parent="5600" name="UQ__tblFoodT__8306939990668347">
++    <index id="5655" parent="5601" name="UQ__tblFoodT__8306939990668347">
+       <ColNames>fldFoodID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5642" parent="5600" name="UQ__tblFoodT__8306939990668347">
++    <key id="5656" parent="5601" name="UQ__tblFoodT__8306939990668347">
+       <CreatedTimestamp>2024-10-30.09:19:45.500</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.500</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>949578421</ObjectId>
+       <UnderlyingIndexName>UQ__tblFoodT__8306939990668347</UnderlyingIndexName>
+     </key>
+-    <column id="5643" parent="5601" name="fldTreatmentID">
++    <column id="5657" parent="5602" name="fldTreatmentID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5644" parent="5601" name="fldDate">
++    <column id="5658" parent="5602" name="fldDate">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5645" parent="5601" name="fldTime">
++    <column id="5659" parent="5602" name="fldTime">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>time|0s</StoredType>
+     </column>
+-    <column id="5646" parent="5601" name="fldTreatmentType">
++    <column id="5660" parent="5602" name="fldTreatmentType">
+       <Position>4</Position>
+       <StoredType>nchar(200 char)|0s</StoredType>
+     </column>
+-    <column id="5647" parent="5601" name="FK_fldDogID">
++    <column id="5661" parent="5602" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>5</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5648" parent="5601" name="FK__tblMedica__FK_fl__52593CB8">
++    <foreign-key id="5662" parent="5602" name="FK__tblMedica__FK_fl__52593CB8">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.523</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.523</ModifiedTimestamp>
+@@ -17323,42 +17407,42 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5649" parent="5601" name="UQ__tblMedic__D7415969439962CC">
++    <index id="5663" parent="5602" name="UQ__tblMedic__D7415969439962CC">
+       <ColNames>fldTreatmentID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5650" parent="5601" name="UQ__tblMedic__D7415969439962CC">
++    <key id="5664" parent="5602" name="UQ__tblMedic__D7415969439962CC">
+       <CreatedTimestamp>2024-10-30.09:19:45.523</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.523</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1365579903</ObjectId>
+       <UnderlyingIndexName>UQ__tblMedic__D7415969439962CC</UnderlyingIndexName>
+     </key>
+-    <column id="5651" parent="5602" name="fldStayID">
++    <column id="5665" parent="5603" name="fldStayID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5652" parent="5602" name="fldCheckInDate">
++    <column id="5666" parent="5603" name="fldCheckInDate">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5653" parent="5602" name="fldCheckOutDate">
++    <column id="5667" parent="5603" name="fldCheckOutDate">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5654" parent="5602" name="FK_fldDogID">
++    <column id="5668" parent="5603" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5655" parent="5602" name="FK__tblStay__FK_fldD__49C3F6B7">
++    <foreign-key id="5669" parent="5603" name="FK__tblStay__FK_fldD__49C3F6B7">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.517</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.517</ModifiedTimestamp>
+@@ -17368,47 +17452,47 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5656" parent="5602" name="UQ__tblStay__BE941371127BF7D6">
++    <index id="5670" parent="5603" name="UQ__tblStay__BE941371127BF7D6">
+       <ColNames>fldStayID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5657" parent="5602" name="UQ__tblStay__BE941371127BF7D6">
++    <key id="5671" parent="5603" name="UQ__tblStay__BE941371127BF7D6">
+       <CreatedTimestamp>2024-10-30.09:19:45.517</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.517</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1221579390</ObjectId>
+       <UnderlyingIndexName>UQ__tblStay__BE941371127BF7D6</UnderlyingIndexName>
+     </key>
+-    <column id="5658" parent="5603" name="fldVaccineID">
++    <column id="5672" parent="5604" name="fldVaccineID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5659" parent="5603" name="fldVaccineType">
++    <column id="5673" parent="5604" name="fldVaccineType">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>nchar(50 char)|0s</StoredType>
+     </column>
+-    <column id="5660" parent="5603" name="fldDateOfVaccination">
++    <column id="5674" parent="5604" name="fldDateOfVaccination">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5661" parent="5603" name="FK_fldVetID">
++    <column id="5675" parent="5604" name="FK_fldVetID">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5662" parent="5603" name="FK_fldDogID">
++    <column id="5676" parent="5604" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>5</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5663" parent="5603" name="FK__tblVaccin__FK_fl__4222D4EF">
++    <foreign-key id="5677" parent="5604" name="FK__tblVaccin__FK_fl__4222D4EF">
+       <ColNames>FK_fldVetID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.510</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.510</ModifiedTimestamp>
+@@ -17418,7 +17502,7 @@
+       <RefTableId>901578250</RefTableId>
+       <RefTableName>tblVet</RefTableName>
+     </foreign-key>
+-    <foreign-key id="5664" parent="5603" name="FK__tblVaccin__FK_fl__4316F928">
++    <foreign-key id="5678" parent="5604" name="FK__tblVaccin__FK_fl__4316F928">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.510</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.510</ModifiedTimestamp>
+@@ -17428,71 +17512,71 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5665" parent="5603" name="UQ__tblVacci__86D5DC5B1AB44FB9">
++    <index id="5679" parent="5604" name="UQ__tblVacci__86D5DC5B1AB44FB9">
+       <ColNames>fldVaccineID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5666" parent="5603" name="UQ__tblVacci__86D5DC5B1AB44FB9">
++    <key id="5680" parent="5604" name="UQ__tblVacci__86D5DC5B1AB44FB9">
+       <CreatedTimestamp>2024-10-30.09:19:45.510</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.510</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>1093578934</ObjectId>
+       <UnderlyingIndexName>UQ__tblVacci__86D5DC5B1AB44FB9</UnderlyingIndexName>
+     </key>
+-    <column id="5667" parent="5604" name="fldVetTelephoneNumber">
++    <column id="5681" parent="5605" name="fldVetTelephoneNumber">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5668" parent="5604" name="fldVetName">
++    <column id="5682" parent="5605" name="fldVetName">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>nchar(100 char)|0s</StoredType>
+     </column>
+-    <column id="5669" parent="5604" name="fldVetAdress">
++    <column id="5683" parent="5605" name="fldVetAdress">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>nchar(256 char)|0s</StoredType>
+     </column>
+-    <index id="5670" parent="5604" name="UQ__tblVet__D8C4634436B2DD96">
++    <index id="5684" parent="5605" name="UQ__tblVet__D8C4634436B2DD96">
+       <ColNames>fldVetTelephoneNumber</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5671" parent="5604" name="UQ__tblVet__D8C4634436B2DD96">
++    <key id="5685" parent="5605" name="UQ__tblVet__D8C4634436B2DD96">
+       <CreatedTimestamp>2024-10-30.09:19:45.497</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.497</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+       <ObjectId>917578307</ObjectId>
+       <UnderlyingIndexName>UQ__tblVet__D8C4634436B2DD96</UnderlyingIndexName>
+     </key>
+-    <column id="5672" parent="5605" name="fldWalkID">
++    <column id="5686" parent="5606" name="fldWalkID">
+       <NotNull>1</NotNull>
+       <Position>1</Position>
+       <SequenceIdentity>1</SequenceIdentity>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <column id="5673" parent="5605" name="fldDate">
++    <column id="5687" parent="5606" name="fldDate">
+       <NotNull>1</NotNull>
+       <Position>2</Position>
+       <StoredType>date|0s</StoredType>
+     </column>
+-    <column id="5674" parent="5605" name="fldTime">
++    <column id="5688" parent="5606" name="fldTime">
+       <NotNull>1</NotNull>
+       <Position>3</Position>
+       <StoredType>time|0s</StoredType>
+     </column>
+-    <column id="5675" parent="5605" name="FK_fldDogID">
++    <column id="5689" parent="5606" name="FK_fldDogID">
+       <NotNull>1</NotNull>
+       <Position>4</Position>
+       <StoredType>int|0s</StoredType>
+     </column>
+-    <foreign-key id="5676" parent="5605" name="FK__tblWalk__FK_fldD__4F7CD00D">
++    <foreign-key id="5690" parent="5606" name="FK__tblWalk__FK_fldD__4F7CD00D">
+       <ColNames>FK_fldDogID</ColNames>
+       <CreatedTimestamp>2024-10-30.09:19:45.523</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.523</ModifiedTimestamp>
+@@ -17502,14 +17586,14 @@
+       <RefTableId>997578592</RefTableId>
+       <RefTableName>tblDog</RefTableName>
+     </foreign-key>
+-    <index id="5677" parent="5605" name="UQ__tblWalk__232CBD8DCAE5BD84">
++    <index id="5691" parent="5606" name="UQ__tblWalk__232CBD8DCAE5BD84">
+       <ColNames>fldWalkID</ColNames>
+       <NameSurrogate>1</NameSurrogate>
+       <Position>2</Position>
+       <Unique>1</Unique>
+       <PartitionDataSpaceId>1</PartitionDataSpaceId>
+     </index>
+-    <key id="5678" parent="5605" name="UQ__tblWalk__232CBD8DCAE5BD84">
++    <key id="5692" parent="5606" name="UQ__tblWalk__232CBD8DCAE5BD84">
+       <CreatedTimestamp>2024-10-30.09:19:45.520</CreatedTimestamp>
+       <ModifiedTimestamp>2024-10-30.09:19:45.520</ModifiedTimestamp>
+       <NameSurrogate>1</NameSurrogate>
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/vcs.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/org/example/HundDao.java\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/example/Hund.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/example/Hund.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/example/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/example/Main.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;Tozic2502&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/Tozic2502/Hundepension.git&quot;,\r\n    &quot;accountId&quot;: &quot;cdcde6aa-55f5-4b0f-90a6-57cf4685cd04&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 6\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2o6wNRrcmA3ZZERts5SJw19MNRK\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"git-widget-placeholder\": \"Hund\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/mikco/Documents/extra/sqljdbc4.jar\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"onboarding.tips.debug.path\": \"C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java\",\r\n    \"project.structure.last.edited\": \"Libraries\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.0\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"DatabaseDriversLRU\": [\r\n      \"sqlserver\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\" />\r\n      <created>1730203296959</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1730203296959</updated>\r\n      <workItem from=\"1730203298100\" duration=\"743000\" />\r\n      <workItem from=\"1730272878094\" duration=\"247000\" />\r\n      <workItem from=\"1730273346893\" duration=\"111000\" />\r\n      <workItem from=\"1730273875617\" duration=\"564000\" />\r\n      <workItem from=\"1730274450953\" duration=\"197000\" />\r\n      <workItem from=\"1730274703128\" duration=\"9000\" />\r\n      <workItem from=\"1730274834278\" duration=\"579000\" />\r\n      <workItem from=\"1730281628059\" duration=\"6311000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Init\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1730203392870</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1730203392870</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/Hund\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Init\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Init\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 466a56c04d0a626df3ad8cf69e907bce95812d54)
++++ b/.idea/workspace.xml	(date 1730362031557)
+@@ -4,13 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HundDao.java" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java" afterDir="false" />
++    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Hund Dao">
+       <change beforePath="$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/cc8457e0-e44f-442e-befd-2cf0dae09f20.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Hund.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Hund.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HundDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HundDao.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HundDaoImpl.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -57,6 +56,7 @@
+   </component>
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
++    "Application.Main.executor": "Run",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+     "git-widget-placeholder": "Hund",
+@@ -103,7 +103,8 @@
+       <workItem from="1730274450953" duration="197000" />
+       <workItem from="1730274703128" duration="9000" />
+       <workItem from="1730274834278" duration="579000" />
+-      <workItem from="1730281628059" duration="6311000" />
++      <workItem from="1730281628059" duration="6457000" />
++      <workItem from="1730358719890" duration="2979000" />
+     </task>
+     <task id="LOCAL-00001" summary="Init">
+       <option name="closed" value="true" />
+@@ -113,7 +114,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1730203392870</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="Hund Dao">
++      <option name="closed" value="true" />
++      <created>1730290156577</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1730290156577</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -144,6 +153,7 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Init" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Init" />
++    <MESSAGE value="Hund Dao" />
++    <option name="LAST_COMMIT_MESSAGE" value="Hund Dao" />
+   </component>
+ </project>
+\ No newline at end of file
