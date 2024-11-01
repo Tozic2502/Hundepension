@@ -1,0 +1,462 @@
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n//TIP To <b>Run</b> code, press <shortcut actionId=\"Run\"/> or\r\n// click the <icon src=\"AllIcons.Actions.Execute\"/> icon in the gutter.\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        //TIP Press <shortcut actionId=\"ShowIntentionActions\"/> with your caret at the highlighted text\r\n        // to see how IntelliJ IDEA suggests fixing it.\r\n        System.out.printf(\"Hello and welcome!\");\r\n\r\n        for (int i = 1; i <= 5; i++) {\r\n            //TIP Press <shortcut actionId=\"Debug\"/> to start debugging your code. We have set one <icon src=\"AllIcons.Debugger.Db_set_breakpoint\"/> breakpoint\r\n            // for you, but you can always add more by pressing <shortcut actionId=\"ToggleLineBreakpoint\"/>.\r\n            System.out.println(\"i = \" + i);\r\n\r\n\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision d2ae5047f2b3c72200c8dab9172158f098f90ce6)
++++ b/src/main/java/org/example/Main.java	(date 1730447163759)
+@@ -1,19 +1,38 @@
+ package org.example;
+ 
+-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
++import java.sql.Connection;
++import java.sql.DriverManager;
++
+ public class Main {
+-    public static void main(String[] args) {
+-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
+-        // to see how IntelliJ IDEA suggests fixing it.
+-        System.out.printf("Hello and welcome!");
+ 
+-        for (int i = 1; i <= 5; i++) {
+-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
+-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
+-            System.out.println("i = " + i);
++    private static final String URL = "jdbc:sqlserver://localhost;instanceName=TH;portNumber=1433;databaseName=sample";
++    private static final String USERNAME = "sa"; // replace with your username
++    private static final String PASSWORD = "123456"; // replace with your password
+ 
+ 
+-        }
++    public static Connection getConnection() throws Exception {
++        Connection conn = null;
++        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
++        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
++        System.out.println("Connected to the database.");
++        return conn;
++    }
++
++
++    public static void main(String[] args) throws Exception{
++        System.out.println("start");
++        Connection conn = getConnection();
++
++        /*
++        DepartmentDao dao = new DepartmentDaoImpl();
++
++        dao.readDepartment("d1");
++
++        Department d = new Department("d4","fishing","New York");
++        dao.createDepartment(d);
++
++        dao.readAllDepartments();
++        */
++        System.out.println("slut");
+     }
+ }
+\ No newline at end of file
+Index: src/main/java/org/example/CustomerDao.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/CustomerDao.java b/src/main/java/org/example/CustomerDao.java
+new file mode 100644
+--- /dev/null	(date 1730447163769)
++++ b/src/main/java/org/example/CustomerDao.java	(date 1730447163769)
+@@ -0,0 +1,7 @@
++package org.example;
++
++public interface CustomerDao {
++    void readCustomer(String no) throws Exception;
++    void readAllCustomer() throws Exception;
++    void createCustomer(Customer customer) throws Exception;
++}
+Index: src/main/java/org/example/Customer_Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Customer_Main.java b/src/main/java/org/example/Customer_Main.java
+new file mode 100644
+--- /dev/null	(date 1730447163784)
++++ b/src/main/java/org/example/Customer_Main.java	(date 1730447163784)
+@@ -0,0 +1,43 @@
++package org.example;
++
++import java.util.Scanner;
++
++public class Customer_Main {
++    public static void main(String[] args) throws Exception {
++        Scanner sc = new Scanner(System.in);
++
++        /*
++         * Get customer details from user
++         */
++
++        System.out.println("Enter customer's name");
++        String name = sc.nextLine();
++
++        System.out.println("Enter customer's address");
++        String address = sc.nextLine();
++
++        System.out.println("Enter customer's phone number");
++        int phone = sc.nextInt();
++
++        System.out.println("Enter customer's email");
++        String email = sc.next();
++
++        /*
++         * Create a new customer
++         */
++        Customer customer = new Customer();
++        customer.setName(name);
++        customer.setAddress(address);
++        customer.setPhoneNumber(phone);
++        customer.setEmail(email);
++
++        CustomerDao showDao = new CustomerDaoImpl();
++        showDao.createCustomer(customer);
++
++        /*
++         * Display the customer details
++         */
++        customer.dispalyCustomerInformation();
++
++    }
++}
+Index: src/main/java/org/example/CustomerDaoImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/CustomerDaoImpl.java b/src/main/java/org/example/CustomerDaoImpl.java
+new file mode 100644
+--- /dev/null	(date 1730447163784)
++++ b/src/main/java/org/example/CustomerDaoImpl.java	(date 1730447163784)
+@@ -0,0 +1,79 @@
++package org.example;
++
++import java.sql.*;
++
++public class CustomerDaoImpl implements CustomerDao {
++
++    private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=dbDogCare";
++    private static final String USERNAME = "sa"; // replace with your username
++    private static final String PASSWORD = "123456789"; // replace with your password
++
++    public static Connection getConnection() throws Exception {
++        Connection conn = null;
++        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
++        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
++        System.out.println("Connected to the database.");
++        return conn;
++    }
++
++    @Override
++    public void createCustomer(Customer customer) throws Exception {
++        String sql = "INSERT INTO tblCustomer VALUES (?, ?, ?, ?)";
++        Connection conn = getConnection();
++        PreparedStatement pstmt = conn.prepareStatement(sql);
++        pstmt.setInt(1, customer.getPhoneNumber());
++        pstmt.setString(2, customer.getName());
++        pstmt.setString(3, customer.getAddress());
++        pstmt.setString(4, customer.getEmail());
++        int affectedRows = pstmt.executeUpdate();
++        if (affectedRows > 0) {
++            System.out.println("Customer added successfully.");
++        } else {
++            System.out.println("Failed to add customer.");
++        }
++    }
++
++    @Override
++    public void readCustomer(String no) throws Exception{
++        String sql = "SELECT * FROM Customer WHERE dept_no = ?";
++        Connection conn = getConnection();
++        PreparedStatement pstmt = conn.prepareStatement(sql);
++        pstmt.setString(1, no);
++        ResultSet rs = pstmt.executeQuery();
++
++        Customer customer = new Customer();
++
++        if (rs.next()) {
++            customer.setPhoneNumber(rs.getInt(1));
++            customer.setName(rs.getString(2));
++            customer.setAddress(rs.getString(3));
++            customer.setEmail(rs.getString(4));
++            System.out.println(customer.getPhoneNumber() + " "+ customer.getName()+ " "+ customer.getAddress()+ " "+ customer.getEmail());
++        } else {
++            System.out.println("No customer found with ID: " + no);
++        }
++    }
++
++    @Override
++    public void readAllCustomer() throws Exception{
++        String sql = "SELECT * FROM Customer";
++        Connection conn = getConnection();
++        PreparedStatement pstmt = conn.prepareStatement(sql);
++        ResultSet rs = pstmt.executeQuery();
++        boolean hasCustomers = false;
++        while (rs.next()) {
++            hasCustomers = true;
++            Customer customer = new Customer();
++            customer.setPhoneNumber(rs.getInt(1));
++            customer.setName(rs.getString(2));
++            customer.setAddress(rs.getString(3));
++            customer.setEmail(rs.getString(4));
++            System.out.println(customer.getPhoneNumber()+" "+ customer.getName()+" "+customer.getAddress()+" "+ customer.getEmail() );
++        }
++        if (!hasCustomers) {
++            System.out.println("No customers found.");
++        }
++    }
++}
++
++
+Index: src/main/java/org/example/Customer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Customer.java b/src/main/java/org/example/Customer.java
+new file mode 100644
+--- /dev/null	(date 1730447163769)
++++ b/src/main/java/org/example/Customer.java	(date 1730447163769)
+@@ -0,0 +1,56 @@
++package org.example;
++
++public class Customer {
++
++    private String name;
++    private int phoneNumber;
++    private String address;
++    private String email;
++
++    public Customer() {
++
++    }
++
++    public Customer(String name, int phoneNumber, String address, String email) {
++        this.name = name;
++        this.phoneNumber = phoneNumber;
++        this.address = address;
++        this.email = email;
++    }
++    public String getName() {
++        return name;
++    }
++    public int getPhoneNumber() {
++        return phoneNumber;
++    }
++    public String getAddress() {
++        return address;
++    }
++    public String getEmail() {
++        return email;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++    public void setPhoneNumber(int phoneNumber) {
++        this.phoneNumber = phoneNumber;
++    }
++    public void setAddress(String address) {
++        this.address = address;
++    }
++    public void setEmail(String email) {
++        this.email = email;
++    }
++
++    /*
++     * Method to display customer details
++     */
++    public void dispalyCustomerInformation() {
++        System.out.println("Customer Details:");
++        System.out.println("Name: " + name);
++        System.out.println("PhoneNumber: " + phoneNumber);
++        System.out.println("Address: " + address);
++        System.out.println("Email: " + email);
++    }
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"customColor\": \"\",\r\n  \"associatedIndex\": 6\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"2o6wNRrcmA3ZZERts5SJw19MNRK\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"onboarding.tips.debug.path\": \"C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\" />\r\n      <created>1730203296959</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1730203296959</updated>\r\n      <workItem from=\"1730203298100\" duration=\"38000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>\r\n          <line>13</line>\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision d2ae5047f2b3c72200c8dab9172158f098f90ce6)
++++ b/.idea/workspace.xml	(date 1730447196554)
+@@ -4,42 +4,88 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Init">
++      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Customer.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/CustomerDao.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/CustomerDaoImpl.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Customer_Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Interface" />
++        <option value="Class" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="Hund" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "customColor": "",
+-  "associatedIndex": 6
+-}]]></component>
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;,
++    &quot;assignee&quot;: &quot;Tozic2502&quot;
++  }
++}</component>
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/Tozic2502/Hundepension.git&quot;,
++    &quot;accountId&quot;: &quot;d1572f3c-a6b3-48e0-b1a3-f4133bc65d0d&quot;
++  }
++}</component>
++  <component name="ProjectColorInfo">{
++  &quot;customColor&quot;: &quot;&quot;,
++  &quot;associatedIndex&quot;: 6
++}</component>
+   <component name="ProjectId" id="2o6wNRrcmA3ZZERts5SJw19MNRK" />
+   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "master",
+-    "kotlin-language-version-configured": "true",
+-    "nodejs_package_manager_path": "npm",
+-    "onboarding.tips.debug.path": "C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Application.Customer_Main.executor&quot;: &quot;Run&quot;,
++    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;Kunde&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/theis/Documents/Intellij/sqljdbc4.jar&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  },
++  &quot;keyToStringList&quot;: {
++    &quot;DatabaseDriversLRU&quot;: [
++      &quot;sqlserver&quot;
++    ]
+   }
+-}]]></component>
++}</component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
++        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
++        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -51,22 +97,47 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1730203296959</updated>
+-      <workItem from="1730203298100" duration="38000" />
++      <workItem from="1730203298100" duration="743000" />
++      <workItem from="1730272878094" duration="247000" />
++      <workItem from="1730273346893" duration="111000" />
++      <workItem from="1730273875617" duration="564000" />
++      <workItem from="1730274450953" duration="197000" />
++      <workItem from="1730274703128" duration="9000" />
++      <workItem from="1730274834278" duration="579000" />
++      <workItem from="1730280450910" duration="1484000" />
++      <workItem from="1730309493335" duration="1485000" />
++      <workItem from="1730310996449" duration="497000" />
++      <workItem from="1730360202167" duration="2398000" />
++      <workItem from="1730362626534" duration="11368000" />
++      <workItem from="1730446849161" duration="345000" />
++    </task>
++    <task id="LOCAL-00001" summary="Init">
++      <option name="closed" value="true" />
++      <created>1730203392870</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1730203392870</updated>
+     </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
+-  <component name="XDebuggerManager">
+-    <breakpoint-manager>
+-      <breakpoints>
+-        <line-breakpoint enabled="true" type="java-line">
+-          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+-          <line>13</line>
+-          <option name="timeStamp" value="1" />
+-        </line-breakpoint>
+-      </breakpoints>
+-    </breakpoint-manager>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Init" />
++    <option name="LAST_COMMIT_MESSAGE" value="Init" />
+   </component>
+ </project>
+\ No newline at end of file
