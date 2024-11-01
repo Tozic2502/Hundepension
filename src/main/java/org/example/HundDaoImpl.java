@@ -5,10 +5,10 @@ public class HundDaoImpl implements HundDao {
 
     private static final String URL = "jdbc:sqlserver://localhost;portNumber=1433;databaseName=dbDogCare";
     private static final String USERNAME = "sa"; // replace with your username
-    private static final String PASSWORD = "1234"; // replace with your password
+    private static final String PASSWORD = "sqlserver1234"; // replace with your password
 
     public static Connection getConnection() throws Exception {
-        Connection conn = null;
+        Connection conn;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         System.out.println("Connected to the database.");
@@ -34,17 +34,17 @@ public class HundDaoImpl implements HundDao {
 
     @Override
     public void readHund(int id) throws Exception{
-        String sql = "SELECT * FROM tblDog WHERE tblID = ?";
+        String sql = "SELECT * FROM tblDog WHERE fldID = ?";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, id);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             Hund hund = new Hund();
-            hund.setName(rs.getString(1));
-            hund.setAge(rs.getInt(2));
-            hund.setBreed(rs.getString(3));
-            hund.setWeight(rs.getInt(4));
+            hund.setName(rs.getString(2));
+            hund.setAge(rs.getInt(3));
+            hund.setBreed(rs.getString(7));
+            hund.setWeight(rs.getInt(8));
 
             System.out.println(hund.getName() + " "+ hund.getAge()+ " "+ hund.getBreed()+ " "+ hund.getWeight());
         } else {
@@ -54,13 +54,13 @@ public class HundDaoImpl implements HundDao {
 
     @Override
     public void readAllHund() throws Exception{
-        String sql = "SELECT * FROM tblDog";
+        String sql = "SELECT fldName, fldAge, fldBreed, fldWeight FROM tblDog";
         Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        boolean hasDog = false;
+        boolean hasHund = false;
         while (rs.next()) {
-            hasDog = true;
+            hasHund = true;
             Hund hund = new Hund();
             hund.setName(rs.getString(1));
             hund.setAge(rs.getInt(2));
@@ -68,7 +68,7 @@ public class HundDaoImpl implements HundDao {
             hund.setWeight(rs.getInt(4));
             System.out.println(hund.getName()+hund.getBreed()+hund.getWeight()+" "+ hund.getAge());
         }
-        if (!hasDog) {
+        if (!hasHund) {
             System.out.println("No departments found.");
         }
     }

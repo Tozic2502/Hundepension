@@ -31,9 +31,7 @@ public class Hund {
 
 
     public void setName(String name) {
-        Scanner scN = new Scanner(System.in);//Scanner to check inputs
-
-        this.name = scN.next();
+        this.name = name;
     }
 
 
@@ -43,9 +41,7 @@ public class Hund {
 
 
     public void setAge(int age) {
-        Scanner scA = new Scanner(System.in);//Scanner to check inputs
-
-        this.age = scA.nextInt();
+        this.age = age;
     }
 
     public String getBreed() {
@@ -53,14 +49,10 @@ public class Hund {
     }
 
     public void setBreed(String breed) {
-        Scanner scB = new Scanner(System.in);//Scanner to check inputs
-
-        this.breed = scB.next();
+        this.breed = breed;
     }
     public void setWeight(int weight){
-        Scanner scW = new Scanner(System.in);
-
-        this.weight = scW.nextInt();
+        this.weight = weight;
     }
     public int getWeight(){
         return weight;
