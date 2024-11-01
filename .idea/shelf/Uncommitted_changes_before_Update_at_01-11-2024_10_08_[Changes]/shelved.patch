@@ -1,0 +1,225 @@
+Index: src/main/java/org/example/CustomerDaoImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.sql.*;\r\n\r\npublic class CustomerDaoImpl implements CustomerDao {\r\n\r\n    private static final String URL = \"jdbc:sqlserver://localhost;portNumber=1433;databaseName=dbDogCare\";\r\n    private static final String USERNAME = \"sa\"; // replace with your username\r\n    private static final String PASSWORD = \"123456789\"; // replace with your password\r\n\r\n    public static Connection getConnection() throws Exception {\r\n        Connection conn = null;\r\n        Class.forName(\"com.microsoft.sqlserver.jdbc.SQLServerDriver\");\r\n        conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);\r\n        System.out.println(\"Connected to the database.\");\r\n        return conn;\r\n    }\r\n\r\n    @Override\r\n    public void createCustomer(Customer customer) throws Exception {\r\n        String sql = \"INSERT INTO tblCustomer VALUES (?, ?, ?, ?)\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setInt(1, customer.getPhoneNumber());\r\n        pstmt.setString(2, customer.getName());\r\n        pstmt.setString(3, customer.getAddress());\r\n        pstmt.setString(4, customer.getEmail());\r\n        int affectedRows = pstmt.executeUpdate();\r\n        if (affectedRows > 0) {\r\n            System.out.println(\"Customer added successfully.\");\r\n        } else {\r\n            System.out.println(\"Failed to add customer.\");\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readCustomer(String no) throws Exception{\r\n        String sql = \"SELECT * FROM Customer WHERE dept_no = ?\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        pstmt.setString(1, no);\r\n        ResultSet rs = pstmt.executeQuery();\r\n\r\n        Customer customer = new Customer();\r\n\r\n        if (rs.next()) {\r\n            customer.setPhoneNumber(rs.getInt(1));\r\n            customer.setName(rs.getString(2));\r\n            customer.setAddress(rs.getString(3));\r\n            customer.setEmail(rs.getString(4));\r\n            System.out.println(customer.getPhoneNumber() + \" \"+ customer.getName()+ \" \"+ customer.getAddress()+ \" \"+ customer.getEmail());\r\n        } else {\r\n            System.out.println(\"No customer found with ID: \" + no);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void readAllCustomer() throws Exception{\r\n        String sql = \"SELECT * FROM Customer\";\r\n        Connection conn = getConnection();\r\n        PreparedStatement pstmt = conn.prepareStatement(sql);\r\n        ResultSet rs = pstmt.executeQuery();\r\n        boolean hasCustomers = false;\r\n        while (rs.next()) {\r\n            hasCustomers = true;\r\n            Customer customer = new Customer();\r\n            customer.setPhoneNumber(rs.getInt(1));\r\n            customer.setName(rs.getString(2));\r\n            customer.setAddress(rs.getString(3));\r\n            customer.setEmail(rs.getString(4));\r\n            System.out.println(customer.getPhoneNumber()+\" \"+ customer.getName()+\" \"+customer.getAddress()+\" \"+ customer.getEmail() );\r\n        }\r\n        if (!hasCustomers) {\r\n            System.out.println(\"No customers found.\");\r\n        }\r\n    }\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/CustomerDaoImpl.java b/src/main/java/org/example/CustomerDaoImpl.java
+--- a/src/main/java/org/example/CustomerDaoImpl.java	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/src/main/java/org/example/CustomerDaoImpl.java	(date 1730450987428)
+@@ -35,7 +35,7 @@
+ 
+     @Override
+     public void readCustomer(String no) throws Exception{
+-        String sql = "SELECT * FROM Customer WHERE dept_no = ?";
++        String sql = "SELECT * FROM Customer WHERE fldCustomerTelephoneNumber = ?";
+         Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         pstmt.setString(1, no);
+@@ -56,7 +56,7 @@
+ 
+     @Override
+     public void readAllCustomer() throws Exception{
+-        String sql = "SELECT * FROM Customer";
++        String sql = "SELECT * FROM tblCustomer";
+         Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery();
+Index: src/main/java/org/example/Customer_Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\nimport java.util.Scanner;\r\n\r\npublic class Customer_Main {\r\n    public static void main(String[] args) throws Exception {\r\n        Scanner sc = new Scanner(System.in);\r\n\r\n        /*\r\n         * Get customer details from user\r\n         */\r\n\r\n        System.out.println(\"Enter customer's name\");\r\n        String name = sc.nextLine();\r\n\r\n        System.out.println(\"Enter customer's address\");\r\n        String address = sc.nextLine();\r\n\r\n        System.out.println(\"Enter customer's phone number\");\r\n        int phone = sc.nextInt();\r\n\r\n        System.out.println(\"Enter customer's email\");\r\n        String email = sc.next();\r\n\r\n        /*\r\n         * Create a new customer\r\n         */\r\n        Customer customer = new Customer();\r\n        customer.setName(name);\r\n        customer.setAddress(address);\r\n        customer.setPhoneNumber(phone);\r\n        customer.setEmail(email);\r\n\r\n        CustomerDao showDao = new CustomerDaoImpl();\r\n        showDao.createCustomer(customer);\r\n\r\n        /*\r\n         * Display the customer details\r\n         */\r\n        customer.dispalyCustomerInformation();\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Customer_Main.java b/src/main/java/org/example/Customer_Main.java
+--- a/src/main/java/org/example/Customer_Main.java	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/src/main/java/org/example/Customer_Main.java	(date 1730449679074)
+@@ -39,5 +39,6 @@
+          */
+         customer.dispalyCustomerInformation();
+ 
++
+     }
+ }
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n    <groupId>org.example</groupId>\r\n    <artifactId>Hundepension</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n\r\n    <properties>\r\n        <maven.compiler.source>22</maven.compiler.source>\r\n        <maven.compiler.target>22</maven.compiler.target>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n        <kotlin.version>2.0.21</kotlin.version>\r\n    </properties>\r\n\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>org.jetbrains.kotlin</groupId>\r\n            <artifactId>kotlin-stdlib-jdk8</artifactId>\r\n            <version>${kotlin.version}</version>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>org.jetbrains.kotlin</groupId>\r\n            <artifactId>kotlin-test</artifactId>\r\n            <version>${kotlin.version}</version>\r\n            <scope>test</scope>\r\n        </dependency>\r\n\r\n    </dependencies>\r\n\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>org.jetbrains.kotlin</groupId>\r\n                <artifactId>kotlin-maven-plugin</artifactId>\r\n                <version>${kotlin.version}</version>\r\n                <executions>\r\n                    <execution>\r\n                        <id>compile</id>\r\n                        <phase>compile</phase>\r\n                        <goals>\r\n                            <goal>compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>test-compile</id>\r\n                        <phase>test-compile</phase>\r\n                        <goals>\r\n                            <goal>test-compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                </executions>\r\n                <configuration>\r\n                    <jvmTarget>${maven.compiler.target}</jvmTarget>\r\n                </configuration>\r\n            </plugin>\r\n            <plugin>\r\n                <groupId>org.apache.maven.plugins</groupId>\r\n                <artifactId>maven-compiler-plugin</artifactId>\r\n                <executions>\r\n                    <execution>\r\n                        <id>default-compile</id>\r\n                        <phase>none</phase>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>default-testCompile</id>\r\n                        <phase>none</phase>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>compile</id>\r\n                        <phase>compile</phase>\r\n                        <goals>\r\n                            <goal>compile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                    <execution>\r\n                        <id>testCompile</id>\r\n                        <phase>test-compile</phase>\r\n                        <goals>\r\n                            <goal>testCompile</goal>\r\n                        </goals>\r\n                    </execution>\r\n                </executions>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/pom.xml	(date 1730450916799)
+@@ -29,6 +29,12 @@
+             <scope>test</scope>
+         </dependency>
+ 
++        <dependency>
++            <groupId>com.microsoft.sqlserver</groupId>
++            <artifactId>mssql-jdbc</artifactId>
++            <version>9.4.0.jre8</version> <!-- Check for the latest JDBC 4 compatible version -->
++        </dependency>
++
+     </dependencies>
+ 
+     <build>
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n\r\nimport java.util.Scanner;\r\n\r\npublic class Main\r\n{\r\n    public static void main(String[] args) throws Exception\r\n    {\r\n        String name;\r\n        int age;\r\n        String breed;\r\n        int weight;\r\n        //VeterinarianDao vetDao = new VeterinarianDaoImpl();\r\n\r\n        System.out.println(\"start\");\r\n\r\n        Scanner inScanner = new Scanner(System.in);\r\n        String menuNavigator;\r\n        System.out.println(\"Goddag Rosa.\\nVælg en funktion\\n1: Kunde\\n2: Hund\\n3: Dyrlæge\");\r\n        menuNavigator = inScanner.nextLine().toLowerCase();\r\n\r\n        switch(menuNavigator)\r\n        {\r\n            case \"kunde\",\"1\":\r\n                System.out.println(\"1: Se Kunder\\n2: Opret Kunde\");\r\n                menuNavigator = inScanner.nextLine().toLowerCase();\r\n\r\n                switch (menuNavigator)\r\n                {\r\n                    case \"opret kunde\",\"1\":\r\n                        break;\r\n                    case \"se kunde\",\"2\":\r\n                        break;\r\n                }\r\n                break;\r\n\r\n            case \"hund\",\"2\":\r\n                System.out.println(\"1: Se Hunde\\n2: Opret Hund\");\r\n                menuNavigator = inScanner.nextLine().toLowerCase();\r\n\r\n                HundDao dao = new HundDaoImpl();\r\n\r\n                switch (menuNavigator)\r\n                {\r\n                    case \"se hunde\",\"1\":\r\n\r\n                        dao.readAllHund();\r\n                        dao.readHund(inputInt(\"Skriv Hundens id\"));\r\n                        break;\r\n\r\n                    case \"opret hund\",\"2\":\r\n\r\n                        //Hund hund = new Hund();\r\n\r\n                        System.out.println(\"start\");\r\n                        Scanner scN = new Scanner(System.in);//Scanner to check inputs\r\n                        System.out.print(\"Enter the name of the dog: \");\r\n                        name = scN.next();\r\n                        Scanner scA = new Scanner(System.in);//Scanner to check inputs\r\n                        System.out.print(\"Enter the age of the dog: \");\r\n                        age = scA.nextInt();\r\n                        Scanner scB = new Scanner(System.in);//Scanner to check inputs\r\n                        System.out.print(\"Enter the breed: \");\r\n                        breed = scB.next();\r\n                        Scanner scW = new Scanner(System.in);//Scanner to check inputs\r\n                        System.out.print(\"Enter the weight of the dog: \");\r\n                        weight = scW.nextInt();\r\n\r\n\r\n                        Hund d = new Hund(name, age, breed, weight);\r\n                        dao.createHund(d);\r\n\r\n                        break;\r\n\r\n\r\n                    default:\r\n                        throw new IllegalStateException(\"Unexpected value: \" + menuNavigator);\r\n                }\r\n                break;\r\n\r\n            case \"dyrlæge\",\"3\":\r\n                System.out.println(\"1: Se Dyrlæger\\n2: Opret Dyrlæge\");\r\n                menuNavigator = inScanner.next().toLowerCase();\r\n\r\n                VeterinarianDao vetDao = new VeterinarianDaoImpl();\r\n\r\n                switch(menuNavigator)\r\n                {\r\n                    case \"se dyrlæge\",\"1\":\r\n                        vetDao.readAllVeterinarians();\r\n                        break;\r\n\r\n                    case \"opret dyrlæge\",\"2\":\r\n                        Veterinarian opretVet = new Veterinarian();\r\n                        opretVet.setFldVetName(inputString(\"Skriv dyrlægens navn:\"));\r\n                        opretVet.setFldVetAdres(inputString(\"Skriv dyrlægens adresse:\"));\r\n                        opretVet.setFldVetTelephoneNumber(inputInt(\"Skriv dyrlægens telefonnummer:\"));\r\n                        vetDao.createVeterinarian(opretVet);\r\n                        break;\r\n                }\r\n                break;\r\n\r\n            default:\r\n                System.out.printf(\"Invalid choice\");\r\n\r\n        }\r\n\r\n        System.out.println(\"end\");\r\n    }\r\n\r\n    //Metode som tager inputs af typen string, for at følge DRY princippet\r\n    public static String inputString (String prompt)\r\n    {\r\n       //Prepares an outputstring\r\n        String outputString = \"\";\r\n\r\n        //Flag to check whether any input has been entered\r\n        boolean isEmpty = true;\r\n\r\n        //If isEmpty is true, loop runs\r\n        while(isEmpty)\r\n        {\r\n            //Prints the user prompt\r\n            System.out.println(prompt);\r\n\r\n            //Readies a scanner and takes the user input\r\n            Scanner inputScanner = new Scanner(System.in);\r\n            outputString = inputScanner.nextLine();\r\n\r\n            //Checks whether outputString is empty\r\n            isEmpty = outputString.isEmpty();\r\n\r\n            //When the string has input, returns the string.\r\n            //if (!isEmpty)\r\n            //{\r\n            //    return outputString;\r\n            //}\r\n\r\n\r\n        }\r\n        return outputString;\r\n    }\r\n\r\n    //Metode som tager inputs af typen int, for at følge DRY-princippet\r\n    private static int inputInt(String prompt)\r\n    {\r\n        //Prepares an output integer\r\n        int outputInt = 0;\r\n\r\n        //Flag to check whether any input, not zero, has been entered\r\n        boolean isEmpty = true;\r\n\r\n        //If isEmpty is true, loop runs\r\n        while(isEmpty)\r\n        {\r\n            //Prints the user prompt\r\n            System.out.println(prompt);\r\n\r\n            //Readies a scanner and takes the user input\r\n            Scanner inputScanner = new Scanner(System.in);\r\n            outputInt = inputScanner.nextInt();\r\n\r\n            //Checks whether input is 0\r\n            isEmpty = outputInt==0;\r\n\r\n            //If outputInt != 0, returns outputInt\r\n            //if (!isEmpty)\r\n            //{\r\n            //    return outputInt;\r\n            //}\r\n\r\n\r\n        }\r\n        return outputInt;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/src/main/java/org/example/Main.java	(date 1730452047551)
+@@ -23,14 +23,23 @@
+         switch(menuNavigator)
+         {
+             case "kunde","1":
+-                System.out.println("1: Se Kunder\n2: Opret Kunde");
++                System.out.println("1: Opret Kunde\n2: Se Kunder");
+                 menuNavigator = inScanner.nextLine().toLowerCase();
+ 
++                CustomerDao cdao = new CustomerDaoImpl();
+                 switch (menuNavigator)
+                 {
+                     case "opret kunde","1":
++                        Customer customer = new Customer();
++                        customer.setName(inputString("Please input customer name:"));
++                        customer.setAddress(inputString("Please input customer address:"));
++                        customer.setPhoneNumber(inputInt("Please input customer phone number:"));
++                        customer.setEmail(inputString("Please input customer email:"));
++                        cdao.createCustomer(customer);
+                         break;
++
+                     case "se kunde","2":
++                        cdao.readAllCustomer();
+                         break;
+                 }
+                 break;
+Index: .idea/dataSources.local.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"dataSourceStorageLocal\" created-in=\"IU-242.20224.419\">\r\n    <data-source name=\"dbDogCare@localhost\" uuid=\"cc8457e0-e44f-442e-befd-2cf0dae09f20\">\r\n      <database-info product=\"Microsoft SQL Server\" version=\"16.00.1000\" jdbc-version=\"4.3\" driver-name=\"Microsoft JDBC Driver 12.8 for SQL Server\" driver-version=\"12.8.1.0\" dbms=\"MSSQL\" exact-version=\"16.0.1000\" exact-driver-version=\"12.8\">\r\n        <extra-name-characters>$#@</extra-name-characters>\r\n        <identifier-quote-string>&quot;</identifier-quote-string>\r\n      </database-info>\r\n      <case-sensitivity plain-identifiers=\"mixed\" quoted-identifiers=\"mixed\" />\r\n      <secret-storage>master_key</secret-storage>\r\n      <user-name>sa</user-name>\r\n      <schema-mapping>\r\n        <introspection-scope>\r\n          <node kind=\"database\" qname=\"@\">\r\n            <node kind=\"schema\" qname=\"@\" />\r\n          </node>\r\n        </introspection-scope>\r\n      </schema-mapping>\r\n    </data-source>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/dataSources.local.xml b/.idea/dataSources.local.xml
+--- a/.idea/dataSources.local.xml	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/.idea/dataSources.local.xml	(date 1730448336489)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="dataSourceStorageLocal" created-in="IU-242.20224.419">
++  <component name="dataSourceStorageLocal" created-in="IU-242.21829.142">
+     <data-source name="dbDogCare@localhost" uuid="cc8457e0-e44f-442e-befd-2cf0dae09f20">
+       <database-info product="Microsoft SQL Server" version="16.00.1000" jdbc-version="4.3" driver-name="Microsoft JDBC Driver 12.8 for SQL Server" driver-version="12.8.1.0" dbms="MSSQL" exact-version="16.0.1000" exact-driver-version="12.8">
+         <extra-name-characters>$#@</extra-name-characters>
+Index: .idea/kotlinc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/kotlinc.xml b/.idea/kotlinc.xml
+new file mode 100644
+--- /dev/null	(date 1730448336484)
++++ b/.idea/kotlinc.xml	(date 1730448336484)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="KotlinJpsPluginSettings">
++    <option name="version" value="2.0.21" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"Kunde\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 6\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2o6wNRrcmA3ZZERts5SJw19MNRK\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"Kunde\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"onboarding.tips.debug.path\": \"C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"19bd630a-1f4f-490e-9531-c9b4d4766ee0\" name=\"Changes\" comment=\"\" />\r\n      <created>1730203296959</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1730203296959</updated>\r\n      <workItem from=\"1730203298100\" duration=\"38000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Kunde\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1730447846574</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1730447846574</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Kunde\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Kunde\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 1c384d575444058ee208ccb9a95f887f7d91b496)
++++ b/.idea/workspace.xml	(date 1730451873047)
+@@ -4,7 +4,15 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="Kunde" />
++    <list default="true" id="19bd630a-1f4f-490e-9531-c9b4d4766ee0" name="Changes" comment="final kunde">
++      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/CustomerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/CustomerDaoImpl.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Customer_Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Customer_Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -13,6 +21,18 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "lastFilter": {
++    "state": "OPEN",
++    "assignee": "TheisLausten"
++  }
++}]]></component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/Tozic2502/Hundepension.git",
++    "accountId": "d1572f3c-a6b3-48e0-b1a3-f4133bc65d0d"
++  }
++}]]></component>
+   <component name="ProjectColorInfo">{
+   &quot;customColor&quot;: &quot;&quot;,
+   &quot;associatedIndex&quot;: 6
+@@ -25,20 +45,29 @@
+   </component>
+   <component name="PropertiesComponent"><![CDATA[{
+   "keyToString": {
++    "Application.Customer_Main.executor": "Run",
++    "Application.Main.executor": "Run",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "Kunde",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "git-widget-placeholder": "master",
+     "kotlin-language-version-configured": "true",
++    "last_opened_file_path": "C:/Users/theis/Documents/Intellij/sqljdbc4.jar",
++    "node.js.detected.package.eslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
+     "node.js.selected.package.tslint": "(autodetect)",
+     "nodejs_package_manager_path": "npm",
+     "onboarding.tips.debug.path": "C:/Users/mikco/Desktop/Skole/Kode folder/Hundepension/src/main/java/org/example/Main.java",
++    "project.structure.last.edited": "Libraries",
++    "project.structure.proportion": "0.15",
++    "project.structure.side.proportion": "0.17126437",
+     "vue.rearranger.settings.migration": "true"
+   }
+ }]]></component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
++        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
++        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -51,6 +80,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1730203296959</updated>
+       <workItem from="1730203298100" duration="38000" />
++      <workItem from="1730450560156" duration="1310000" />
+     </task>
+     <task id="LOCAL-00001" summary="Kunde">
+       <option name="closed" value="true" />

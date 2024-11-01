@@ -29,10 +29,12 @@ public class Main
                 System.out.println("1: Opret Kunde\n2: Se Kunder");
                 menuNavigator = inScanner.nextLine().toLowerCase();
 
+                // Instantiates a new object of class CustomerDaoImpl of type CustomerDao
                 CustomerDao cdao = new CustomerDaoImpl();
                 switch (menuNavigator)
                 {
                     case "opret kunde","1":
+                        // Creates a new object of class CustomerDaoImpl of type CustomerDao
                         Customer customer = new Customer();
                         customer.setName(inputString("Please input customer name:"));
                         customer.setAddress(inputString("Please input customer address:"));
@@ -42,6 +44,7 @@ public class Main
                         break;
 
                     case "se kunde","2":
+                        // Calls a method from class CustomerDaoImpl to read customers from database and print
                         cdao.readAllCustomer();
                         break;
                 }
